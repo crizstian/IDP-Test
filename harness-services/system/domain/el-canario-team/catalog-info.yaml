@@ -2,8 +2,8 @@ kind: System
 spec:
   owner: cristian.ramirez@harness.io
   domain: Cristian_Lab
-  #dependsOn:
-  #  - component:Core_Banking
+  dependsOn:
+    - component:Cristian_Lab
 apiVersion: backstage.io/v1alpha1
 metadata:
   name: El_Canario_Team
