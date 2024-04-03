@@ -4,6 +4,8 @@ metadata:
   name: my-new-service
   description: Description of my new service
   annotations:
+    jira/project-key: PL-21592
+    #jira/component: <example-component> # optional, you might skip this value to fetch data for all components
     #backstage.io/techdocs-ref: dir:.
     backstage.io/techdocs-ref: url:https://github.com/backstage/backstage/tree/master/plugins/techdocs-backend/examples/documented-component
   tags:
