@@ -37,3 +37,8 @@ spec:
   lifecycle: production
   owner: Platform_Engineering
   system: el_canario_team_MQTH
+  dependsOn:
+    - component:Cristian_Labs
+
+
+
