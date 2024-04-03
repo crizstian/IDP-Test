@@ -4,7 +4,8 @@ metadata:
   name: my-new-service
   description: Description of my new service
   annotations:
-    backstage.io/techdocs-ref: dir:.
+    #backstage.io/techdocs-ref: dir:.
+    backstage.io/techdocs-ref: url:https://github.com/backstage/backstage/tree/master/plugins/techdocs-backend/examples/documented-component
   tags:
     - java
   links:
