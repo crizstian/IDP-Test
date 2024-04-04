@@ -11,6 +11,8 @@ metadata:
       title:  Harness Platform Demo Project
       icon: dashboard
       type: Harness Platform Demo
+
+# USERS AND GROUPS ARE MAPPED AND MANAGED BY HARNESS RBAC SETTINGS
 # ---
 # apiVersion: backstage.io/v1alpha1
 # kind: User

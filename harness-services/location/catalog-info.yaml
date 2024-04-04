@@ -5,5 +5,5 @@ metadata:
 spec:
   type: url
   targets:
-    - https://github.com/crizstian/IDP-Test/blob/main/harness-services/org/Cristian_Lab/catalog-info.yaml
-    - https://github.com/crizstian/IDP-Test/blob/main/harness-services/org/el-canario-team/catalog-info.yaml
+    - https://github.com/crizstian/IDP-Test/blob/main/harness-services/domain/org/cristian-lab/catalog-info.yaml
+    - https://github.com/crizstian/IDP-Test/blob/main/harness-services/domain/project/el-canario-team/catalog-info.yaml
