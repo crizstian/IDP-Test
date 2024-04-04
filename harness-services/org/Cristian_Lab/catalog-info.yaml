@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Domain
 spec:
-  owner: cristian.ramirez@harness.io
+  owner: Platfrom_Engineering
 metadata:
   name: Cristian_Labs
   description: Cristian Lab Organization
