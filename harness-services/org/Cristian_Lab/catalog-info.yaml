@@ -1,0 +1,38 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+spec:
+  owner: cristian.ramirez@harness.io
+metadata:
+  name: Cristian_Labs
+  description: Cristian Lab Organization
+  tags: []
+  links:
+    - url: https://app.harness.io/ng/account/6_vVHzo9Qeu9fXvj-AcbCQ/home/orgs/default/projects/Platform_Demo/details
+      title:  Harness Platform Demo Project
+      icon: dashboard
+      type: Harness Platform Demo
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: cristian.ramirez@harness.io
+spec:
+  profile:
+    displayName: "Cristian Ramirez"
+    email: cristian.ramirez@harness.io
+    picture: https://example.com/staff/jenny-with-party-hat.jpeg
+  memberOf: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: Platform_Engineering
+  description: The PLE group
+spec:
+  type: team
+  profile:
+    displayName: Platform Engineering
+    email: selatam@harness.io
+    picture: https://example.com/groups/bu-infrastructure.jpeg
+  children: []
+  members: [cristian.ramirez@harness.io]
