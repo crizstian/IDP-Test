@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: System
 spec:
-  owner: Platfrom_Engineering
+  owner: Platform_Engineering
   domain: Cristian_Labs
 metadata:
   name: El_Canario_Team
