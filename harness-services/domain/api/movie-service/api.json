@@ -1,0 +1,121 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Movies Service",
+        "version": "v1"
+    },
+    "servers": [],
+    "paths": {
+        "//premieres": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MoviePremieres"
+                                }
+                            }
+                        }
+                    }
+                },
+                "operationId": "GET_premieres"
+            }
+        },
+        "//{id}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Movie"
+                                }
+                            }
+                        }
+                    }
+                },
+                "operationId": "GET_id"
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ]
+        }
+    },
+    "components": {
+        "schemas": {
+            "Movie": {
+                "example": {
+                    "id": "123",
+                    "title": "Assasins Creed",
+                    "runtime": 115,
+                    "format": "IMAX",
+                    "plot": "Lorem ipsum dolor sit amet",
+                    "releaseYear": 2017,
+                    "releaseMonth": 1,
+                    "releaseDay": 6
+                },
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "runtime": {
+                        "type": "number"
+                    },
+                    "format": {
+                        "type": "string"
+                    },
+                    "plot": {
+                        "type": "string"
+                    },
+                    "releaseYear": {
+                        "type": "number"
+                    },
+                    "releaseMonth": {
+                        "type": "number"
+                    },
+                    "releaseDay": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "id",
+                    "title",
+                    "runtime",
+                    "format",
+                    "plot",
+                    "releaseYear",
+                    "releaseMonth",
+                    "releaseDay"
+                ],
+                "type": "object"
+            },
+            "MoviePremieres": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/Movie "
+                }
+            }
+        },
+        "responses": {},
+        "parameters": {},
+        "examples": {},
+        "requestBodies": {},
+        "headers": {},
+        "securitySchemes": {},
+        "links": {},
+        "callbacks": {}
+    }
+}

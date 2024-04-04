@@ -1,0 +1,39 @@
+kind: API
+spec:
+  lifecycle: prod
+  owner: Platform_Engineering
+  system: El_Canario_Team
+  type: openapi
+  definition:
+    $text: ./api.json
+  #providesApis:
+  #  - petstore
+  #  - starwars-graphql
+apiVersion: backstage.io/v1alpha1
+metadata:
+  name: movie-service
+  description: API backend to get list of current movies
+  links:
+    - url: http://34.67.7.165/
+      title: Prod Website
+      icon: dashboard
+      type: Boutique FrontEnd
+    - url: http://34.28.46.65
+      title: QA Website
+      icon: dashboard
+      type: Boutique FrontEnd
+    - url: http://34.135.60.81/
+      title: Dev Website
+      icon: dashboard
+      type: Boutique FrontEnd
+  tags: 
+    - store
+    - rest
+  annotations:
+    #harness.io/project-url: https://app.harness.io/ng/account/6_vVHzo9Qeu9fXvj-AcbCQ/home/orgs/default/projects/Platform_Demo/details
+    #harness.io/cd-serviceId: Boutique_Frontend
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: crizstian/cinema-microservice-in-GO
+    #backstage.io/kubernetes-label-selector: 'backstage.io/kubernetes-id=boutique-frontend'
+    #backstage.io/kubernetes-id: boutique-frontend
+    #pagerduty.com/service-id: PGXMVMC
