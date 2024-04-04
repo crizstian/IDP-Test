@@ -11,28 +11,28 @@ metadata:
       title:  Harness Platform Demo Project
       icon: dashboard
       type: Harness Platform Demo
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: cristian.ramirez@harness.io
-spec:
-  profile:
-    displayName: "Cristian Ramirez"
-    email: cristian.ramirez@harness.io
-    picture: https://example.com/staff/jenny-with-party-hat.jpeg
-  memberOf: []
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: Platform_Engineering
-  description: The PLE group
-spec:
-  type: team
-  profile:
-    displayName: Platform Engineering
-    email: selatam@harness.io
-    picture: https://example.com/groups/bu-infrastructure.jpeg
-  children: []
-  members: [cristian.ramirez@harness.io]
+# ---
+# apiVersion: backstage.io/v1alpha1
+# kind: User
+# metadata:
+#   name: cristian.ramirez@harness.io
+# spec:
+#   profile:
+#     displayName: "Cristian Ramirez"
+#     email: cristian.ramirez@harness.io
+#     picture: https://example.com/staff/jenny-with-party-hat.jpeg
+#   memberOf: []
+# ---
+# apiVersion: backstage.io/v1alpha1
+# kind: Group
+# metadata:
+#   name: Platform_Engineering
+#   description: The PLE group
+# spec:
+#   type: team
+#   profile:
+#     displayName: Platform Engineering
+#     email: selatam@harness.io
+#     picture: https://example.com/groups/bu-infrastructure.jpeg
+#   children: []
+#   members: [cristian.ramirez@harness.io]
