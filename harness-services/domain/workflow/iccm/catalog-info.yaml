@@ -1,8 +1,8 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: harness_onboarding
-  title: Create IAC with terraform 
+  name: harness_onboarding_cramirez
+  title: Create IAC with terraform Cristian
   description: Creates new GH Repo and Harness project, registers app as a service and creates pipeline(s)
   tags:
     - java
