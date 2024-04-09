@@ -67,7 +67,7 @@ spec:
       input:
         url: "https://app.harness.io/ng/account/Io9SR1H7TtGBq9LVyJVB2w/module/cd/orgs/cristian_labs_MQTH/projects/infrastructure_team_MQTH/pipelines/test/pipeline-studio/?storeType=INLINE"
         inputset:
-          serviceName: ${{ parameters.machine_type }}
+          gcp_machine_type: ${{ parameters.machine_type }}
         apikey: ${{ parameters.token }}
 
   output:
