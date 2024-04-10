@@ -3,7 +3,7 @@ spec:
   type: Service
   lifecycle: prod
   owner: Platform_Engineering
-  system: El_Canario_Team
+  system: Project_Demo
   providesApis:
     - movie-service
   #  - starwars-graphql
