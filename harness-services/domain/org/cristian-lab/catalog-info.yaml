@@ -3,7 +3,7 @@ kind: Domain
 spec:
   owner: Platform_Engineering
 metadata:
-  name: Cristian_Labs
+  name: Business_Unit_Demo
   description: Cristian Lab Organization
   tags: []
   links:
