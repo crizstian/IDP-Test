@@ -1,7 +1,7 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: harness_onboarding
+  name: harness_onboarding_s3
   title: Create S3 Bucket
   description: Creates new aws s3 bucket
   tags:
