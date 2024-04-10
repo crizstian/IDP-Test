@@ -2,7 +2,7 @@ kind: API
 spec:
   lifecycle: prod
   owner: Platform_Engineering
-  system: El_Canario_Team
+  system: Project_Demo
   type: openapi
   definition:
     $text: ./api.json
