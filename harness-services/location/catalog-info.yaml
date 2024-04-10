@@ -9,3 +9,5 @@ spec:
     - https://github.com/crizstian/IDP-Test/blob/main/harness-services/domain/project/el-canario-team/catalog-info.yaml
     - https://github.com/crizstian/IDP-Test/blob/main/harness-services/domain/component/cinema-catalog-service/catalog-info.yml
     - https://github.com/crizstian/IDP-Test/blob/main/harness-services/domain/api/movie-service/catalog-info.yml
+    - https://github.com/crizstian/IDP-Test/blob/main/harness-services/domain/workflow/aws/s3/catalog-info.yaml
+    - https://github.com/crizstian/IDP-Test/blob/main/harness-services/domain/workflow/iacm/catalog-info.yaml

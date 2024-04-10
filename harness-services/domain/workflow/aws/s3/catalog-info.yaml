@@ -1,0 +1,58 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: harness_onboarding
+  title: Create S3 Bucket
+  description: Creates new aws s3 bucket
+  tags:
+    - aws
+spec:
+  owner: Platform_Engineering
+  type: service
+  parameters:
+    - title: Bucket Details
+      required:
+        - owner
+      properties:
+        region:
+          title: Choose a cloud region
+          type: string
+          enum: ["us-east-1", "us-west-1", "us-east-2", "us-west-2"]
+          default: us-east-1
+        bucket_name:
+          title: bucket name
+          type: string
+          description: uniqueBucketName
+        site_name:
+          title: website name
+          type: string
+          description: uniqueBucketName
+        owner:
+          title: Choose an Owner for the Service
+          type: string
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+        # This field is hidden but needed to authenticate the request to trigger the pipeline
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken
+  steps:
+    - id: trigger
+      name: Provisioning S3 Bucket
+      action: trigger:harness-custom-pipeline
+      input:
+        url: "https://app.harness.io/ng/account/Io9SR1H7TtGBq9LVyJVB2w/all/orgs/cristian_labs_MQTH/projects/infrastructure_team_MQTH/pipelines/awss3bucket/pipeline-studio/?storeType=INLINE"
+        inputset:
+          region: ${{ parameters.region }}
+          bucket_name: ${{ parameters.bucket_name }}
+          site_name: ${{ parameters.site_name }}
+        apikey: ${{ parameters.token }}
+
+  output:
+    links:
+      - title: Pipeline Details
+        url: ${{ steps.trigger.output.PipelineUrl }}
