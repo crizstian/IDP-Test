@@ -1,52 +1,34 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: harness_onboarding_cramirez
-  title: Create IAC with terraform Cristian
+  name: harness_onboarding
+  title: Create GCP GKE instance 
   description: Creates new GH Repo and Harness project, registers app as a service and creates pipeline(s)
   tags:
-    - java
+    - gcp
 spec:
   owner: cristian.ramirez@harness.io
   type: service
   parameters:
-    - title: Project and Repo Details
-      properties:
-        projectName:
-          title: Machine Type
-          type: string
-          description: uniqueTeamName
-        github_repo:
-          title: Provide a Unique Repo/App Name?
-          type: string
-          description: someRepoName
-        isPublish:
-          title: Will this be pushed to the internal production-level artifact registry? (Unchecked only gets pushed to sandbox artifact repository)
-          type: boolean
     - title: Service and Infrastructure Details
       required:
         - owner
       properties:
-        machine_type:
-          title: Machine Type
+        cloud_provider:
+          title: Choose a cloud provider for Deployment
           type: string
-          enum: ["n1-standard-2"]
-          default: AWS
+          enum: ["GCP", "AWS", "Azure", "OCI"]
+          default: GCP
         tech_stack:
           title: Choose the Underlying Infra for the App
           type: string
           enum: ["K8s", "VMS", "ECS", "Lambda"]
           default: K8s
-        db:
-          title: Choose a Database Type for the Service
+        gcp_machine_type:
+          title: Choose the Underlying Infra for the App
           type: string
-          enum: ["None", "MySQL", "Postgres", "MongoDB"]
-          default: MongoDB
-        cache:
-          title: Choose a Caching System for the Service
-          type: string
-          enum: ["None", "Redis"]
-          default: None
+          enum: ["n1-standard-2"]
+          default: K8s
         owner:
           title: Choose an Owner for the Service
           type: string
@@ -62,12 +44,12 @@ spec:
           ui:field: HarnessAuthToken
   steps:
     - id: trigger
-      name: Creating Repos and Onboarding your Application
+      name: Provisioning Infrastructure
       action: trigger:harness-custom-pipeline
       input:
-        url: "https://app.harness.io/ng/account/Io9SR1H7TtGBq9LVyJVB2w/module/cd/orgs/cristian_labs_MQTH/projects/infrastructure_team_MQTH/pipelines/test/pipeline-studio/?storeType=INLINE"
+        url: "https://app.harness.io/ng/account/Io9SR1H7TtGBq9LVyJVB2w/module/cd/orgs/cristian_labs_MQTH/projects/infrastructure_team_MQTH/pipelines/test/pipeline-studio?storeType=INLINE"
         inputset:
-          gcp_machine_type: ${{ parameters.machine_type }}
+          gcp_machine_type: ${{ parameters.gcp_machine_type }}
         apikey: ${{ parameters.token }}
 
   output:
