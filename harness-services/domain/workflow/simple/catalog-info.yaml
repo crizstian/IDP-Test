@@ -1,0 +1,52 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: harness_onboarding
+  title: Create Harness Components
+  description: Create Harness Components
+  tags:
+    - harness
+spec:
+  owner: Platform_Engineering
+  type: service
+  parameters:
+    - title: Harness Details
+      required:
+        - owner
+      properties:
+        organization:
+          title: Organization name
+          type: string
+          description: name of the org to onbaord
+        project:
+          title: project name
+          type: string
+          description: name of the proj to onbaord
+        owner:
+          title: Choose an Owner for the Service
+          type: string
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+        # This field is hidden but needed to authenticate the request to trigger the pipeline
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken
+  steps:
+    - id: trigger
+      name: Provisioning harness onboard
+      action: trigger:harness-custom-pipeline
+      input:
+        url: "https://app.harness.io/ng/account/Io9SR1H7TtGBq9LVyJVB2w/module/iacm/orgs/cristian_labs_MQTH/projects/el_canario_team_MQTH/pipelines/onboarding/pipeline-studio/?storeType=INLINE"
+        inputset:
+          organization: ${{ parameters.organization }}
+          project: ${{ parameters.project }}
+        apikey: ${{ parameters.token }}
+
+  output:
+    links:
+      - title: Pipeline Details
+        url: ${{ steps.trigger.output.PipelineUrl }}
