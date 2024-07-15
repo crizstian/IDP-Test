@@ -40,7 +40,7 @@ spec:
       name: Provisioning harness onboard
       action: trigger:harness-custom-pipeline
       input:
-        url: "https://app.harness.io/ng/account/Io9SR1H7TtGBq9LVyJVB2w/module/iacm/orgs/cristian_labs_MQTH/projects/el_canario_team_MQTH/pipelines/onboarding/pipeline-studio/?storeType=INLINE"
+        url: "https://app.harness.io/ng/account/ZISsCYUqSdCobg6CctEyHw/all/orgs/Global/projects/Global/pipelines/harnessonboardingidp/pipeline-studio/?storeType=INLINE"
         inputset:
           organization: ${{ parameters.organization }}
           project: ${{ parameters.project }}
