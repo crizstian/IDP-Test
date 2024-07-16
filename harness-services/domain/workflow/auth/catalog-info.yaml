@@ -1,0 +1,75 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: pipeline CI/CD
+  title: pipeline CI/CD
+  description: pipeline CI/CD
+  tags:
+    - harness
+    - aws
+    - python
+spec:
+  owner: cristian.ramirez@harness.io
+  type: service
+  parameters:
+    - title: Bucket Details
+      required:
+        - owner
+      properties:
+        region:
+          title: Choose a cloud region
+          type: string
+          enum: ["us-east-1", "us-west-1", "us-east-2", "us-west-2"]
+          default: us-east-1
+        ejecutar_migracion:
+          title: ejecutar migracion en pipeline
+          type: string
+          enum: ["true", "false"]
+          default: "false"
+        aws_account_id:
+          title: AWS Account ID
+          type: string
+          enum: ["982020408954"]
+        image_name:
+          title: nombre de la imagen del contenedor
+          type: string
+          enum: ["dev2/auth/backend"]
+        dopplerproject:
+          title: nombre de la imagen del contenedor
+          type: string
+          enum: ["auth-backend"]
+          default: "auth-backend"
+        dopplerconfig:
+          title: nombre de la imagen del contenedor
+          type: string
+          enum: ["dev2"]
+          default: "dev2"
+        branch:
+          title: branch
+          type: string
+        # This field is hidden but needed to authenticate the request to trigger the pipeline
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken
+  steps:
+    - id: trigger
+      name: Provisioning S3 Bucket
+      action: trigger:harness-custom-pipeline
+      input:
+        url: "https://app.harness.io/ng/account/ZISsCYUqSdCobg6CctEyHw/all/orgs/Global/projects/Global/pipelines/devcicd_Clone/pipeline-studio?storeType=INLINE"
+        inputset:
+          region: ${{ parameters.region }}
+          ejecutar_migracion: ${{ parameters.ejecutar_migracion }}
+          aws_account_id: ${{ parameters.aws_account_id }}
+          image_name: ${{ parameters.image_name }}
+          dopplerproject: ${{ parameters.dopplerproject }}
+          dopplerconfig: ${{ parameters.dopplerconfig }}
+          branch: ${{ parameters.branch }}
+        apikey: ${{ parameters.token }}
+
+  output:
+    links:
+      - title: Pipeline Details
+        url: ${{ steps.trigger.output.PipelineUrl }}
