@@ -14,7 +14,7 @@ spec:
   parameters:
     - title: Bucket Details
       required:
-        - owner
+        - branch
       properties:
         region:
           title: Choose a cloud region
