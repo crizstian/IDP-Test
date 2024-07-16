@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: pipeline CI/CD
-  title: pipeline CI/CD
-  description: pipeline CI/CD
+  name: pipeline CICD
+  title: pipeline CICD
+  description: pipeline CICD
   tags:
     - harness
     - aws
