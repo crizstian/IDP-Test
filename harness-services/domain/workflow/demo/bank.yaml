@@ -1,0 +1,457 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: service-deployment-template
+  title: Service Deployment Template
+  description: Template for creating and deploying services with infrastructure provisioning
+  tags:
+    - harness
+    - recommended
+    - service
+spec:
+  owner: cristian.ramirez@harness.io
+  type: service
+  system: harness-idp
+
+  parameters:
+    #######################
+    # Section 1: Project Setup
+    #######################
+    - title: Project Setup
+      description: Configure Harness organization and project settings
+      required:
+        - orgId
+        - projectType
+      properties:
+        orgId:
+          title: Harness Organization
+          type: string
+          description: Select Harness Organization
+          ui:field: HarnessOrgPicker
+          ui:autofocus: true
+
+        projectType:
+          title: Project Type
+          type: string
+          description: Select whether this is a new project or existing project
+          enum:
+            - new
+            - existing
+          ui:field: Select
+
+        projectId:
+          title: Select Existing Project
+          type: string
+          description: Select from available Harness projects
+          ui:field: HarnessProjectPicker
+          ui:options:
+            orgId: ${{ parameters.orgId }}
+          visible: ${{ parameters.projectType === 'existing' }}
+
+        newProjectName:
+          title: New Project Name
+          type: string
+          description: Name of the new project in Harness
+          ui:widget: text
+          visible: ${{ parameters.projectType === 'new' }}
+
+    #######################
+    # Section 2: Repository Setup
+    #######################
+    - title: Repository Setup
+      description: Configure repository and application settings
+      required:
+        - repoName
+        - programmingLanguage
+        - scaffolderType
+        - frameworkVersion
+      properties:
+        repoName:
+          title: Repository Name
+          type: string
+          description: Name of the repository
+
+        repoVisibility:
+          title: Repository Visibility
+          type: string
+          description: Select repository visibility
+          enum:
+            - public
+            - private
+          default: private
+          ui:field: Select
+
+        programmingLanguage:
+          title: Programming Language
+          type: string
+          description: Select the programming language
+          enum:
+            - java
+            - node
+            - python
+            - go
+          ui:field: Select
+          
+        scaffolderType:
+          title: Framework Selection
+          type: string
+          description: Select the framework
+          ui:field: Select
+          ui:options:
+            dependencies:
+              programmingLanguage:
+                java:
+                  enum:
+                    - spring-boot
+                    - quarkus
+                    - micronaut
+                node:
+                  enum:
+                    - express
+                    - nest
+                    - fastify
+                python:
+                  enum:
+                    - fastapi
+                    - django
+                    - flask
+                go:
+                  enum:
+                    - gin
+                    - echo
+                    - fiber
+
+        frameworkVersion:
+          title: Framework Version
+          type: string
+          description: Select the framework version
+          ui:field: Select
+          ui:options:
+            dependencies:
+              scaffolderType:
+                spring-boot:
+                  enum:
+                    - "3.4.3 (Latest)"
+                    - "3.2.3 (LTS)"
+                    - "2.7.18 (Legacy LTS)"
+                express:
+                  enum:
+                    - "5.0.0 (Latest)"
+                    - "4.18.2 (LTS)"
+                fastapi:
+                  enum:
+                    - "0.109.0 (Latest)"
+                    - "0.108.0 (Stable)"
+                gin:
+                  enum:
+                    - "1.9.1 (Latest)"
+                    - "1.8.2 (Stable)"
+
+        artifactRegistry:
+          title: Artifact Registry
+          type: string
+          description: Select the artifact registry for your container images
+          enum:
+            - docker-hub
+            - gcr
+            - ecr
+            - jfrog
+          ui:field: Select
+
+    #######################
+    # Section 3: Infrastructure Setup
+    #######################
+    - title: Infrastructure Setup
+      description: Configure deployment infrastructure settings
+      required:
+        - deploymentTechnology
+        - infrastructureType
+      properties:
+        deploymentTechnology:
+          title: Deployment Technology
+          type: string
+          description: Select deployment technology
+          enum:
+            - legacy
+            - modern
+          ui:field: Select
+          
+        infrastructureType:
+          title: Infrastructure Type
+          type: string
+          description: Select infrastructure type
+          enum:
+            - vm
+            - kubernetes
+          ui:field: Select
+
+        # VM-specific configuration
+        vmConfig:
+          title: VM Configuration
+          type: object
+          description: Configure VM settings
+          visible: ${{ parameters.infrastructureType === 'vm' }}
+          required:
+            - vmName
+            - vmRam
+            - vmCpu
+            - vmDisk
+            - cloudProjectId
+          properties:
+            vmName:
+              title: VM Name
+              type: string
+            vmRam:
+              title: RAM (GB)
+              type: number
+              default: 4
+            vmCpu:
+              title: CPU Cores
+              type: number
+              default: 2
+            vmDisk:
+              title: Disk Size (GB)
+              type: number
+              default: 50
+            cloudProjectId:
+              title: Cloud Project ID
+              type: string
+              description: AWS ID/OpenShift Project/etc
+            ports:
+              title: Available Ports
+              type: array
+              items:
+                type: number
+              default: [80, 443]
+
+        # Kubernetes-specific configuration
+        k8sConfig:
+          title: Kubernetes Configuration
+          type: object
+          description: Configure Kubernetes settings
+          visible: ${{ parameters.infrastructureType === 'kubernetes' }}
+          required:
+            - namespace
+            - createIngress
+          properties:
+            namespace:
+              title: Kubernetes Namespace
+              type: string
+            createIngress:
+              title: Generate Kubernetes Ingress
+              type: boolean
+              default: true
+            ingressDomain:
+              title: Ingress Domain
+              type: string
+              visible: ${{ parameters.k8sConfig.createIngress }}
+            useHelmChart:
+              title: Use Helm Chart
+              type: boolean
+              default: false
+
+    #######################
+    # Section 4: Pipeline Setup
+    #######################
+    - title: Pipeline Configuration
+      description: Configure CI/CD pipeline settings
+      required:
+        - pipelineId
+        - environments
+      properties:
+        pipelineId:
+          title: Pipeline Template
+          type: string
+          description: Select the pipeline template to use
+          ui:field: HarnessPipelinePicker
+          ui:options:
+            orgId: ${{ parameters.orgId }}
+            projectId: ${{ parameters.projectId }}
+
+        environments:
+          title: Deployment Environments
+          type: array
+          description: Select environments to configure
+          items:
+            type: string
+          default: ['dev', 'sit']
+          ui:widget: tags
+
+        # Environment Variables
+        environmentVariables:
+          title: Environment Variables
+          type: object
+          description: Configure environment-specific variables
+          properties:
+            dev:
+              type: object
+              additionalProperties: true
+              title: Development Environment Variables
+            sit:
+              type: object
+              additionalProperties: true
+              title: SIT Environment Variables
+
+        # Trigger Configuration
+        triggerConfig:
+          title: Trigger Configuration
+          type: object
+          required:
+            - enabled
+            - events
+          properties:
+            enabled:
+              title: Enable Pipeline Trigger
+              type: boolean
+              default: true
+            events:
+              title: Trigger Events
+              type: array
+              items:
+                type: string
+              enum:
+                - pull_request
+                - push
+                - tag
+              default: ['pull_request']
+            branches:
+              title: Target Branches
+              type: array
+              items:
+                type: string
+              default: ['main', 'master']
+
+  steps:
+    #######################
+    # Project Setup Steps
+    #######################
+    - id: validate-project
+      name: Validate Project Selection
+      action: harness:validate-project
+      input:
+        orgId: ${{ parameters.orgId }}
+        projectType: ${{ parameters.projectType }}
+        projectId: ${{ parameters.projectType === 'existing' ? parameters.projectId : null }}
+        newProjectName: ${{ parameters.projectType === 'new' ? parameters.newProjectName : null }}
+
+    - id: create-project
+      name: Create New Project
+      action: harness:create-project
+      if: ${{ parameters.projectType === 'new' }}
+      input:
+        orgId: ${{ parameters.orgId }}
+        projectName: ${{ parameters.newProjectName }}
+
+    #######################
+    # Repository Setup Steps
+    #######################
+    - id: create-repository
+      name: Create Repository
+      action: harness:create-repository
+      input:
+        repoName: ${{ parameters.repoName }}
+        visibility: ${{ parameters.repoVisibility }}
+        
+    - id: generate-code
+      name: Generate Application Code
+      action: harness:generate-code
+      input:
+        language: ${{ parameters.programmingLanguage }}
+        framework: ${{ parameters.scaffolderType }}
+        version: ${{ parameters.frameworkVersion }}
+        repoUrl: ${{ steps['create-repository'].output.repoUrl }}
+
+    #######################
+    # Infrastructure Setup Steps
+    #######################
+    - id: create-infrastructure
+      name: Create Infrastructure
+      action: harness:create-infrastructure
+      input:
+        type: ${{ parameters.infrastructureType }}
+        vmConfig: ${{ parameters.infrastructureType === 'vm' ? parameters.vmConfig : null }}
+        k8sConfig: ${{ parameters.infrastructureType === 'kubernetes' ? parameters.k8sConfig : null }}
+
+    #######################
+    # Pipeline Setup Steps
+    #######################
+    - id: create-pipeline-inputset
+      name: Create Pipeline InputSet
+      action: harness:create-inputset
+      input:
+        pipelineId: ${{ parameters.pipelineId }}
+        inputSet:
+          name: ${{ parameters.repoName }}-inputset
+          identifier: ${{ parameters.repoName }}_inputset
+          orgIdentifier: ${{ parameters.orgId }}
+          projectIdentifier: ${{ parameters.projectId }}
+          pipeline:
+            identifier: ${{ parameters.pipelineId }}
+          variables:
+            - name: repoName
+              type: string
+              value: ${{ parameters.repoName }}
+            - name: language
+              type: string
+              value: ${{ parameters.programmingLanguage }}
+            - name: framework
+              type: string
+              value: ${{ parameters.scaffolderType }}
+            - name: frameworkVersion
+              type: string
+              value: ${{ parameters.frameworkVersion }}
+            - name: infrastructureType
+              type: string
+              value: ${{ parameters.infrastructureType }}
+            - name: environments
+              type: array
+              value: ${{ parameters.environments }}
+            - name: artifactRegistry
+              type: string
+              value: ${{ parameters.artifactRegistry }}
+
+    - id: create-pipeline-trigger
+      name: Create Pipeline Trigger
+      action: harness:create-trigger
+      if: ${{ parameters.triggerConfig.enabled }}
+      input:
+        name: ${{ parameters.repoName }}-trigger
+        identifier: ${{ parameters.repoName }}_trigger
+        orgIdentifier: ${{ parameters.orgId }}
+        projectIdentifier: ${{ parameters.projectId }}
+        pipelineIdentifier: ${{ parameters.pipelineId }}
+        inputSetIdentifier: ${{ steps['create-pipeline-inputset'].output.inputSetId }}
+        source:
+          type: webhook
+          spec:
+            type: github
+            spec:
+              events: ${{ parameters.triggerConfig.events }}
+              branches: ${{ parameters.triggerConfig.branches }}
+
+    - id: register-in-catalog
+      name: Register in Service Catalog
+      action: harness:register-service
+      input:
+        name: ${{ parameters.repoName }}
+        orgId: ${{ parameters.orgId }}
+        projectId: ${{ parameters.projectId }}
+        type: service
+        spec:
+          type: service
+          lifecycle: production
+          owner: ${{ spec.owner }}
+          system: ${{ spec.system }}
+          framework: ${{ parameters.scaffolderType }}
+          language: ${{ parameters.programmingLanguage }}
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps['create-repository'].output.repoUrl }}
+      - title: Harness Project
+        url: ${{ steps['create-project'].output.projectUrl }}
+      - title: Pipeline
+        url: ${{ steps['create-pipeline-trigger'].output.triggerUrl }}
+      - title: Service Catalog
+        url: ${{ steps['register-in-catalog'].output.catalogUrl }}
