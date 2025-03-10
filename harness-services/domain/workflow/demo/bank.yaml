@@ -11,7 +11,7 @@ metadata:
 spec:
   owner: cristian.ramirez@harness.io
   type: service
-  system: harness-idp
+  system: CristianRamirez
 
   parameters:
     #######################
