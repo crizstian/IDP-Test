@@ -375,83 +375,97 @@ spec:
     #######################
     # Pipeline Setup Steps
     #######################
-    - id: create-pipeline-inputset
-      name: Create Pipeline InputSet
-      action: harness:create-inputset
+  steps:
+    #######################
+    # Trigger Pipeline Step
+    #######################
+    - id: trigger
+      name: Provisioning harness onboard
+      action: trigger:harness-custom-pipeline
       input:
-        pipelineId: ${{ parameters.pipelineId }}
-        inputSet:
-          name: ${{ parameters.repoName }}-inputset
-          identifier: ${{ parameters.repoName }}_inputset
-          orgIdentifier: ${{ parameters.orgId }}
-          projectIdentifier: ${{ parameters.projectId }}
-          pipeline:
-            identifier: ${{ parameters.pipelineId }}
-          variables:
-            - name: repoName
-              type: string
-              value: ${{ parameters.repoName }}
-            - name: language
-              type: string
-              value: ${{ parameters.programmingLanguage }}
-            - name: framework
-              type: string
-              value: ${{ parameters.scaffolderType }}
-            - name: frameworkVersion
-              type: string
-              value: ${{ parameters.frameworkVersion }}
-            - name: infrastructureType
-              type: string
-              value: ${{ parameters.infrastructureType }}
-            - name: environments
-              type: array
-              value: ${{ parameters.environments }}
-            - name: artifactRegistry
-              type: string
-              value: ${{ parameters.artifactRegistry }}
+        url: "https://app.harness.io/ng/account/ZISsCYUqSdCobg6CctEyHw/all/orgs/Global/projects/Global/pipelines/harnessonboardingidp/pipeline-studio/?storeType=INLINE"
+        inputset:
+          # Project Setup Variables
+          organization: '${{ parameters.orgId }}'
+          project: >-
+            ${{ parameters.projectType === 'existing' 
+            ? parameters.projectId 
+            : parameters.newProjectName }}
+          projectType: '${{ parameters.projectType }}'
 
-    - id: create-pipeline-trigger
-      name: Create Pipeline Trigger
-      action: harness:create-trigger
-      if: ${{ parameters.triggerConfig.enabled }}
-      input:
-        name: ${{ parameters.repoName }}-trigger
-        identifier: ${{ parameters.repoName }}_trigger
-        orgIdentifier: ${{ parameters.orgId }}
-        projectIdentifier: ${{ parameters.projectId }}
-        pipelineIdentifier: ${{ parameters.pipelineId }}
-        inputSetIdentifier: ${{ steps['create-pipeline-inputset'].output.inputSetId }}
-        source:
-          type: webhook
-          spec:
-            type: github
-            spec:
-              events: ${{ parameters.triggerConfig.events }}
-              branches: ${{ parameters.triggerConfig.branches }}
+          # Repository Variables
+          repoName: '${{ parameters.repoName }}'
+          repoVisibility: '${{ parameters.repoVisibility }}'
+          programmingLanguage: '${{ parameters.programmingLanguage }}'
+          framework: '${{ parameters.scaffolderType }}'
+          frameworkVersion: '${{ parameters.frameworkVersion }}'
+          artifactRegistry: '${{ parameters.artifactRegistry }}'
 
+          # Infrastructure Variables
+          deploymentTechnology: '${{ parameters.deploymentTechnology }}'
+          infrastructureType: '${{ parameters.infrastructureType }}'
+
+          # VM Config (if applicable)
+          vmConfig: >-
+            ${{ parameters.infrastructureType === 'vm' 
+            ? {
+              'name': parameters.vmConfig.vmName,
+              'ram': parameters.vmConfig.vmRam,
+              'cpu': parameters.vmConfig.vmCpu,
+              'disk': parameters.vmConfig.vmDisk,
+              'cloudProjectId': parameters.vmConfig.cloudProjectId,
+              'ports': parameters.vmConfig.ports
+            } 
+            : null }}
+
+          # K8s Config (if applicable)
+          k8sConfig: >-
+            ${{ parameters.infrastructureType === 'kubernetes' 
+            ? {
+              'namespace': parameters.k8sConfig.namespace,
+              'createIngress': parameters.k8sConfig.createIngress,
+              'ingressDomain': parameters.k8sConfig.ingressDomain,
+              'useHelmChart': parameters.k8sConfig.useHelmChart
+            } 
+            : null }}
+
+          # Environment Variables
+          environments: '${{ parameters.environments }}'
+          environmentVariables: '${{ parameters.environmentVariables }}'
+
+          # Trigger Configuration
+          triggerEnabled: '${{ parameters.triggerConfig.enabled }}'
+          triggerEvents: '${{ parameters.triggerConfig.events }}'
+          triggerBranches: '${{ parameters.triggerConfig.branches }}'
+
+        apikey: '${{ parameters.token }}'
+
+    #######################
+    # Register in Catalog
+    #######################
     - id: register-in-catalog
       name: Register in Service Catalog
       action: harness:register-service
       input:
-        name: ${{ parameters.repoName }}
-        orgId: ${{ parameters.orgId }}
-        projectId: ${{ parameters.projectId }}
+        name: '${{ parameters.repoName }}'
+        orgId: '${{ parameters.orgId }}'
+        projectId: >-
+          ${{ parameters.projectType === 'existing' 
+          ? parameters.projectId 
+          : steps['create-project'].output.projectId }}
         type: service
         spec:
           type: service
           lifecycle: production
-          owner: ${{ spec.owner }}
-          system: ${{ spec.system }}
-          framework: ${{ parameters.scaffolderType }}
-          language: ${{ parameters.programmingLanguage }}
+          owner: '${{ spec.owner }}'
+          system: '${{ spec.system }}'
+          framework: '${{ parameters.scaffolderType }}'
+          language: '${{ parameters.programmingLanguage }}'
 
   output:
     links:
-      - title: Repository
-        url: ${{ steps['create-repository'].output.repoUrl }}
-      - title: Harness Project
-        url: ${{ steps['create-project'].output.projectUrl }}
-      - title: Pipeline
-        url: ${{ steps['create-pipeline-trigger'].output.triggerUrl }}
+      - title: Pipeline Execution
+        url: '${{ steps.trigger.output.pipelineUrl }}'
       - title: Service Catalog
-        url: ${{ steps['register-in-catalog'].output.catalogUrl }}
+        url: '${{ steps["register-in-catalog"].output.catalogUrl }}'
+
