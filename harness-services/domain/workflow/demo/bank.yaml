@@ -151,16 +151,16 @@ spec:
             - jfrog
           ui:field: Select
           
-    steps:
-      - id: trigger
-        name: Creating your python app
-        action: trigger:harness-custom-pipeline
-        input:
-          url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/demo/projects/Reference_Architecture/pipelines/DevX_Project_Provision/pipeline-studio?repoName=org.devx_provision&branch=main
-          inputset:
-            username: ${{ parameters.project_name }}
-          apikey: ${{ parameters.token }}
-    output:
-      links:
-        - title: Pipeline Details
-          url: ${{ steps.trigger.output.PipelineUrl }}
+  steps:
+    - id: trigger
+      name: Creating your python app
+      action: trigger:harness-custom-pipeline
+      input:
+        url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/demo/projects/Reference_Architecture/pipelines/DevX_Project_Provision/pipeline-studio?repoName=org.devx_provision&branch=main
+        inputset:
+          username: ${{ parameters.project_name }}
+        apikey: ${{ parameters.token }}
+  output:
+    links:
+      - title: Pipeline Details
+        url: ${{ steps.trigger.output.PipelineUrl }}
