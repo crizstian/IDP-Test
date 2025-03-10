@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: service-deployment-template
-  title: Service Deployment Template
-  description: Template for creating and deploying services with infrastructure provisioning
+  name: service-onboarding-template
+  title: Service onboarding template
+  description: Template for full project onboarding
   tags:
     - harness
     - recommended
@@ -11,12 +11,8 @@ metadata:
 spec:
   owner: cristian.ramirez@harness.io
   type: service
-  system: CristianRamirez
 
   parameters:
-    #######################
-    # Section 1: Project Setup
-    #######################
     - title: Project Setup
       description: Configure Harness organization and project settings
       required:
@@ -55,9 +51,6 @@ spec:
           ui:widget: text
           visible: ${{ parameters.projectType === 'new' }}
 
-    #######################
-    # Section 2: Repository Setup
-    #######################
     - title: Repository Setup
       description: Configure repository and application settings
       required:
@@ -157,168 +150,17 @@ spec:
             - ecr
             - jfrog
           ui:field: Select
-
-    #######################
-    # Section 3: Infrastructure Setup
-    #######################
-    - title: Infrastructure Setup
-      description: Configure deployment infrastructure settings
-      required:
-        - deploymentTechnology
-        - infrastructureType
-      properties:
-        deploymentTechnology:
-          title: Deployment Technology
-          type: string
-          description: Select deployment technology
-          enum:
-            - legacy
-            - modern
-          ui:field: Select
           
-        infrastructureType:
-          title: Infrastructure Type
-          type: string
-          description: Select infrastructure type
-          enum:
-            - vm
-            - kubernetes
-          ui:field: Select
-
-        # VM-specific configuration
-        vmConfig:
-          title: VM Configuration
-          type: object
-          description: Configure VM settings
-          visible: ${{ parameters.infrastructureType === 'vm' }}
-          required:
-            - vmName
-            - vmRam
-            - vmCpu
-            - vmDisk
-            - cloudProjectId
-          properties:
-            vmName:
-              title: VM Name
-              type: string
-            vmRam:
-              title: RAM (GB)
-              type: number
-              default: 4
-            vmCpu:
-              title: CPU Cores
-              type: number
-              default: 2
-            vmDisk:
-              title: Disk Size (GB)
-              type: number
-              default: 50
-            cloudProjectId:
-              title: Cloud Project ID
-              type: string
-              description: AWS ID/OpenShift Project/etc
-            ports:
-              title: Available Ports
-              type: array
-              items:
-                type: number
-              default: [80, 443]
-
-        # Kubernetes-specific configuration
-        k8sConfig:
-          title: Kubernetes Configuration
-          type: object
-          description: Configure Kubernetes settings
-          visible: ${{ parameters.infrastructureType === 'kubernetes' }}
-          required:
-            - namespace
-            - createIngress
-          properties:
-            namespace:
-              title: Kubernetes Namespace
-              type: string
-            createIngress:
-              title: Generate Kubernetes Ingress
-              type: boolean
-              default: true
-            ingressDomain:
-              title: Ingress Domain
-              type: string
-              visible: ${{ parameters.k8sConfig.createIngress }}
-            useHelmChart:
-              title: Use Helm Chart
-              type: boolean
-              default: false
-
-    #######################
-    # Section 4: Pipeline Setup
-    #######################
-    - title: Pipeline Configuration
-      description: Configure CI/CD pipeline settings
-      required:
-        - pipelineId
-        - environments
-      properties:
-        pipelineId:
-          title: Pipeline Template
-          type: string
-          description: Select the pipeline template to use
-          ui:field: HarnessPipelinePicker
-          ui:options:
-            orgId: ${{ parameters.orgId }}
-            projectId: ${{ parameters.projectId }}
-
-        environments:
-          title: Deployment Environments
-          type: array
-          description: Select environments to configure
-          items:
-            type: string
-          default: ['dev', 'sit']
-          ui:widget: tags
-
-        # Environment Variables
-        environmentVariables:
-          title: Environment Variables
-          type: object
-          description: Configure environment-specific variables
-          properties:
-            dev:
-              type: object
-              additionalProperties: true
-              title: Development Environment Variables
-            sit:
-              type: object
-              additionalProperties: true
-              title: SIT Environment Variables
-
-        # Trigger Configuration
-        triggerConfig:
-          title: Trigger Configuration
-          type: object
-          required:
-            - enabled
-            - events
-          properties:
-            enabled:
-              title: Enable Pipeline Trigger
-              type: boolean
-              default: true
-            events:
-              title: Trigger Events
-              type: array
-              items:
-                type: string
-              enum:
-                - pull_request
-                - push
-                - tag
-              default: ['pull_request']
-            branches:
-              title: Target Branches
-              type: array
-              items:
-                type: string
-              default: ['main', 'master']
-
-
+steps:
+  - id: trigger
+    name: Creating your python app
+    action: trigger:harness-custom-pipeline
+    input:
+      url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/demo/projects/Reference_Architecture/pipelines/DevX_Project_Provision/pipeline-studio?repoName=org.devx_provision&branch=main
+      inputset:
+        username: ${{ parameters.project_name }}
+      apikey: ${{ parameters.token }}
+output:
+  links:
+    - title: Pipeline Details
+      url: ${{ steps.trigger.output.PipelineUrl }}
