@@ -134,7 +134,6 @@ spec:
                           default: true
                 required:
                   - kubernetesConfiguration                  
-
     - title: Repository Setup
       properties:  
         repoName:
@@ -286,7 +285,6 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-
   steps:
     - id: project-provision
       name: Project Provision
@@ -326,7 +324,6 @@ spec:
           pythonVersions: ${{ parameters.pythonVersions }}
           goVersions: ${{ parameters.goVersions }}
         apikey: ${{ parameters.token }}
-
   output:
     links:
       - title: Pipeline Project Provision
