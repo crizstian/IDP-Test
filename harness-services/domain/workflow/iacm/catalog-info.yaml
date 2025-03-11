@@ -14,13 +14,7 @@ spec:
 
   parameters:
     - title: Project Setup
-      properties:
-        # This field is hidden but needed to authenticate the request to trigger the pipeline
-        token:
-          title: Harness Token
-          type: string
-          ui:widget: password
-          ui:field: HarnessAuthToken     
+      properties:    
         project:
           title: Nuevo Proyecto
           type: boolean
@@ -41,6 +35,9 @@ spec:
                     type: string
                     description: Name of the new project in Harness
                     ui:widget: text
+                    description: uniqueTeamName, please follow regex pattern ^([a-z]*)*$
+                    maxLength: 12
+                    pattern: '^([a-z]*)*$'
                   orgId:
                     title: Org Identifier
                     type: string
@@ -137,6 +134,13 @@ spec:
 
     - title: Repository Setup
       properties:
+        # This field is hidden but needed to authenticate the request to trigger the pipeline
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken   
+              
         repoName:
           title: Repository Name
           type: string
