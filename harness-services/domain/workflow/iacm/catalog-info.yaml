@@ -14,7 +14,12 @@ spec:
 
   parameters:
     - title: Project Setup
-      properties:    
+      properties:
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken    
         project:
           title: Nuevo Proyecto
           type: boolean
@@ -132,14 +137,7 @@ spec:
                   - kubernetesConfiguration                  
 
     - title: Repository Setup
-      properties:
-        # This field is hidden but needed to authenticate the request to trigger the pipeline
-        token:
-          title: Harness Token
-          type: string
-          ui:widget: password
-          ui:field: HarnessAuthToken   
-
+      properties:  
         repoName:
           title: Repository Name
           type: string
