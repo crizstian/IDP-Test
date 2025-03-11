@@ -20,7 +20,7 @@ spec:
           title: Harness Token
           type: string
           ui:widget: password
-          ui:field: HarnessAuthToken      
+          ui:field: HarnessAuthToken     
         project:
           title: Nuevo Proyecto
           type: boolean
@@ -303,7 +303,7 @@ spec:
           project_name: ${{ parameters.project_name }}
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
-        apikey: '${{ parameters.token }}'
+        apikey: ${{ parameters.token }}
 
     - id: infrastructure-provision
       name: Infrastructure Provision
@@ -316,7 +316,7 @@ spec:
           infrastructureType: ${{ parameters.infrastructureType }}
           vmConfiguration: ${{ parameters.vmConfiguration }}
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
-        apikey: '${{ parameters.token }}'
+        apikey: ${{ parameters.token }}
 
     - id: repository-provision
       name: Repository Provision
@@ -332,7 +332,7 @@ spec:
           nodeVersions: ${{ parameters.nodeVersions }}
           pythonVersions: ${{ parameters.pythonVersions }}
           goVersions: ${{ parameters.goVersions }}
-        apikey: '${{ parameters.token }}'
+        apikey: ${{ parameters.token }}
 
   output:
     links:
