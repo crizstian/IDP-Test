@@ -35,7 +35,6 @@ spec:
                     type: string
                     description: Name of the new project in Harness
                     ui:widget: text
-                    description: uniqueTeamName, please follow regex pattern ^([a-z]*)*$
                     maxLength: 12
                     pattern: '^([a-z]*)*$'
                   orgId:
@@ -140,7 +139,7 @@ spec:
           type: string
           ui:widget: password
           ui:field: HarnessAuthToken   
-              
+
         repoName:
           title: Repository Name
           type: string
