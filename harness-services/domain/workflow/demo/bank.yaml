@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: service-onboarding-template
-  title: Service onboarding template
-  description: Template for full project onboarding
+  name: service-deployment-template
+  title: Service Deployment Template
+  description: Template for creating and deploying services with infrastructure provisioning
   tags:
     - harness
     - recommended
@@ -14,65 +14,127 @@ spec:
 
   parameters:
     - title: Project Setup
-      description: Configure Harness organization and project settings
-      required:
-        - orgId
-        - projectType
       properties:
-        orgId:
-          title: Harness Organization
-          type: string
-          description: Select Harness Organization
-          ui:field: HarnessOrgPicker
-          ui:autofocus: true
+        project:
+          title: Nuevo Proyecto
+          type: boolean
+          default: true
+          ui:widget: radio
 
-        projectType:
-          title: Project Type
+      dependencies:
+        project:
+          allOf:
+            - if:
+                properties:
+                  project:
+                    const: true
+              then:
+                properties:
+                  project_name:
+                    title: New Project Name
+                    type: string
+                    description: Name of the new project in Harness
+                    ui:widget: text
+                  orgId:
+                    title: Org Identifier
+                    type: string
+                    ui:field: HarnessOrgPicker                    
+            - if:
+                properties:
+                  project:
+                    const: false
+              then:
+                properties:
+                  projectId:
+                    title: Project Identifier
+                    description: Harness Project Identifier
+                    type: string
+                    ui:field: HarnessProjectPicker
+                  orgId:
+                    title: Org Identifier
+                    description: Harness org Identifier
+                    type: string
+                    ui:field: HarnessAutoOrgPicker                  
+
+    - title: Infrastructure Setup
+      properties:
+        infrastructureType:
+          title: Infrastructure Type
           type: string
-          description: Select whether this is a new project or existing project
+          description: Select infrastructure type
           enum:
-            - new
-            - existing
-          ui:field: Select
+            - vm
+            - kubernetes
 
-        projectId:
-          title: Select Existing Project
-          type: string
-          description: Select from available Harness projects
-          ui:field: HarnessProjectPicker
-          ui:options:
-            orgId: ${{ parameters.orgId }}
-          visible: ${{ parameters.projectType === 'existing' }}
-
-        newProjectName:
-          title: New Project Name
-          type: string
-          description: Name of the new project in Harness
-          ui:widget: text
-          visible: ${{ parameters.projectType === 'new' }}
+      dependencies:
+        infrastructureType:
+          allOf:
+            - if:
+                properties:
+                  infrastructureType:
+                    const: vm
+              then:
+                properties:
+                  vmConfiguration:
+                      type: object
+                      properties:
+                        vmName:
+                          title: VM Name
+                          type: string
+                        vmRam:
+                          title: RAM (GB)
+                          type: number
+                          default: 4
+                        vmCpu:
+                          title: CPU Cores
+                          type: number
+                          default: 2
+                        vmDisk:
+                          title: Disk Size (GB)
+                          type: number
+                          default: 50
+                        cloudProjectId:
+                          title: Cloud Project ID
+                          type: string
+                          description: AWS ID/OpenShift Project/etc
+                        ports:
+                          title: Available Ports
+                          type: array
+                          items:
+                            type: number
+                          default: [80, 443]
+                required:
+                  - vmConfiguration
+            - if:
+                properties:
+                  infrastructureType:
+                    const: kubernetes
+              then:
+                properties:
+                  kubernetesConfiguration:
+                      type: object
+                      properties:
+                        cluster:
+                          title: Kubernetes Namespace
+                          type: string
+                          enum: ["dev", "sit"]
+                          default: dev
+                        namespace:
+                          title: Kubernetes Namespace
+                          type: string
+                        createIngress:
+                          title: Generate Kubernetes Ingress
+                          type: boolean
+                          default: true
+                required:
+                  - kubernetesConfiguration                  
 
     - title: Repository Setup
-      description: Configure repository and application settings
-      required:
-        - repoName
-        - programmingLanguage
-        - scaffolderType
-        - frameworkVersion
       properties:
         repoName:
           title: Repository Name
           type: string
           description: Name of the repository
-
-        repoVisibility:
-          title: Repository Visibility
-          type: string
-          description: Select repository visibility
-          enum:
-            - public
-            - private
-          default: private
-          ui:field: Select
 
         programmingLanguage:
           title: Programming Language
@@ -83,84 +145,191 @@ spec:
             - node
             - python
             - go
-          ui:field: Select
-          
-        scaffolderType:
-          title: Framework Selection
-          type: string
-          description: Select the framework
-          ui:field: Select
-          ui:options:
-            dependencies:
-              programmingLanguage:
-                java:
-                  enum:
-                    - spring-boot
-                    - quarkus
-                    - micronaut
-                node:
-                  enum:
-                    - express
-                    - nest
-                    - fastify
-                python:
-                  enum:
-                    - fastapi
-                    - django
-                    - flask
-                go:
-                  enum:
-                    - gin
-                    - echo
-                    - fiber
 
-        frameworkVersion:
-          title: Framework Version
-          type: string
-          description: Select the framework version
-          ui:field: Select
-          ui:options:
-            dependencies:
-              scaffolderType:
-                spring-boot:
-                  enum:
-                    - "3.4.3 (Latest)"
-                    - "3.2.3 (LTS)"
-                    - "2.7.18 (Legacy LTS)"
-                express:
-                  enum:
-                    - "5.0.0 (Latest)"
-                    - "4.18.2 (LTS)"
-                fastapi:
-                  enum:
-                    - "0.109.0 (Latest)"
-                    - "0.108.0 (Stable)"
-                gin:
-                  enum:
-                    - "1.9.1 (Latest)"
-                    - "1.8.2 (Stable)"
+      dependencies:
+        programmingLanguage:
+          allOf:
+            - if:
+                properties:
+                  programmingLanguage:
+                    const: java
+              then:
+                properties:
+                  javaVersions:
+                    title: Java Version
+                    type: string
+                    enum:
+                      - "17"
+                      - "11"
+                      - "8"
+                  scaffolderType:
+                    title: Java Framework
+                    type: string
+                    enum:
+                      - spring-boot
+                      - quarkus
+                      - micronaut
+                  frameworkVersion:
+                    title: Framework Version
+                    type: string
+                    enum:
+                      - "3.4.3 (Latest)"
+                      - "3.2.3 (LTS)"
+                      - "2.7.18 (Legacy LTS)"
+                required:
+                  - scaffolderType
+                  - frameworkVersion
 
-        artifactRegistry:
-          title: Artifact Registry
-          type: string
-          description: Select the artifact registry for your container images
-          enum:
-            - docker-hub
-            - gcr
-            - ecr
-            - jfrog
-          ui:field: Select
-          
-  steps:
-    - id: trigger
-      name: Creating your python app
-      action: trigger:harness-custom-pipeline
-      input:
-        url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/demo/projects/Reference_Architecture/pipelines/DevX_Project_Provision/pipeline-studio?repoName=org.devx_provision&branch=main
-        inputset:
-          username: ${{ parameters.project_name }}
-        apikey: ${{ parameters.token }}
-  output:
-    links:
-      - title: Pipeline Details
-        url: ${{ steps.trigger.output.PipelineUrl }}
+            - if:
+                properties:
+                  programmingLanguage:
+                    const: node
+              then:
+                properties:
+                  nodeVersions:
+                    title: Node.js Version
+                    type: string
+                    enum:
+                      - "18"
+                      - "17"
+                      - "16"
+                      - "15"
+                      - "14"
+                      - "13"
+                      - "12"
+                      - "11"
+                  scaffolderType:
+                    title: Node.js Framework
+                    type: string
+                    enum:
+                      - express
+                      - nest
+                      - fastify
+                  frameworkVersion:
+                    title: Framework Version
+                    type: string
+                    enum:
+                      - "5.0.0 (Latest)"
+                      - "4.18.2 (LTS)"
+                required:
+                  - scaffolderType
+                  - frameworkVersion
+
+            - if:
+                properties:
+                  programmingLanguage:
+                    const: python
+              then:
+                properties:
+                  pythonVersions:
+                    title: Python Version
+                    type: string
+                    enum:
+                      - "3.12"
+                      - "3.11"
+                      - "3.10"
+                      - "3.9"
+                      - "3.8"
+                      - "3.7"
+                      - "3.6"
+                      - "3.5"
+                  scaffolderType:
+                    title: Python Framework
+                    type: string
+                    enum:
+                      - fastapi
+                      - django
+                      - flask
+                  frameworkVersion:
+                    title: Framework Version
+                    type: string
+                    enum:
+                      - "0.109.0 (Latest)"
+                      - "0.108.0 (Stable)"
+                required:
+                  - scaffolderType
+                  - frameworkVersion
+
+            - if:
+                properties:
+                  programmingLanguage:
+                    const: go
+              then:
+                properties:
+                  goVersions:
+                    title: Go Version
+                    type: string
+                    enum:
+                      - "1.21"
+                      - "1.20"
+                      - "1.19"
+                      - "1.18"
+                      - "1.17"
+                      - "1.16"
+                      - "1.15"
+                      - "1.14"
+                  scaffolderType:
+                    title: Go Framework
+                    type: string
+                    enum:
+                      - gin
+                      - echo
+                      - fiber
+                  frameworkVersion:
+                    title: Framework Version
+                    type: string
+                    enum:
+                      - "1.9.1 (Latest)"
+                      - "1.8.2 (Stable)"
+                required:
+                  - scaffolderType
+                  - frameworkVersion
+  
+
+ steps:
+  - id: project-provision
+    name: Project Provision
+    action: trigger:harness-custom-pipeline
+    input:
+      url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+      inputset:
+        project: ${{ parameters.project }}
+        project_name: ${{ parameters.project_name }}
+        orgId: ${{ parameters.orgId }}
+        projectId: ${{ parameters.projectId }}
+      apikey: '${{ parameters.token }}'
+
+  - id: infrastructure-provision
+    name: Infrastructure Provision
+    action: trigger:harness-custom-pipeline
+    input:
+      url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+      inputset:
+        orgId: ${{ parameters.orgId }}
+        projectId: ${{ parameters.projectId }}
+        infrastructureType: ${{ parameters.infrastructureType }}
+        vmConfiguration: ${{ parameters.vmConfiguration }}
+        kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
+      apikey: '${{ parameters.token }}'
+
+  - id: repository-provision
+    name: Repository Provision
+    action: trigger:harness-custom-pipeline
+    input:
+      url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+      inputset:
+        orgId: ${{ parameters.orgId }}
+        projectId: ${{ parameters.projectId }}
+        infrastructureType: ${{ parameters.infrastructureType }}
+        vmConfiguration: ${{ parameters.vmConfiguration }}
+        kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
+      apikey: '${{ parameters.token }}'
+
+output:
+  links:
+    - title: Pipeline Project Provision
+      url: '${{ steps.project-provision.output.pipelineUrl }}'  
+    - title: Pipeline Infrastructure Provision
+      url: '${{ steps.infrastructure-provision.output.pipelineUrl }}'  
+    - title: Pipeline Repository Provision
+      url: '${{ steps.repository-provision.output.pipelineUrl }}'  
