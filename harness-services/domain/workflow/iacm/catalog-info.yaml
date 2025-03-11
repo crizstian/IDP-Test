@@ -6,21 +6,27 @@ metadata:
   description: Template for creating and deploying services with infrastructure provisioning
   tags:
     - harness
-    - recommended
-    - service
 spec:
   owner: cristian.ramirez@harness.io
   type: service
-
   parameters:
     - title: Project Setup
+      required:
+        - project
+        - project_name
+        - orgId
+        - projectId
       properties:   
         project:
           title: Nuevo Proyecto
           type: boolean
           default: true
           ui:widget: radio
-
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken
       dependencies:
         project:
           allOf:
@@ -57,7 +63,6 @@ spec:
                     description: Harness org Identifier
                     type: string
                     ui:field: HarnessAutoOrgPicker                  
-
     - title: Infrastructure Setup
       properties:
         infrastructureType:
@@ -67,7 +72,6 @@ spec:
           enum:
             - vm
             - kubernetes
-
       dependencies:
         infrastructureType:
           allOf:
@@ -147,7 +151,6 @@ spec:
             - node
             - python
             - go
-
       dependencies:
         programmingLanguage:
           allOf:
@@ -181,7 +184,6 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-
             - if:
                 properties:
                   programmingLanguage:
@@ -216,7 +218,6 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-
             - if:
                 properties:
                   programmingLanguage:
@@ -251,7 +252,6 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-
             - if:
                 properties:
                   programmingLanguage:
@@ -286,7 +286,6 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-  
 
   steps:
     - id: project-provision
@@ -299,8 +298,7 @@ spec:
           project_name: ${{ parameters.project_name }}
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
-        apiKeySecret: ${{ CristianRamirezIDP }}
-
+        apikey: ${{ parameters.token }}
     - id: infrastructure-provision
       name: Infrastructure Provision
       action: trigger:harness-custom-pipeline
@@ -312,8 +310,7 @@ spec:
           infrastructureType: ${{ parameters.infrastructureType }}
           vmConfiguration: ${{ parameters.vmConfiguration }}
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
-        apiKeySecret: ${{ CristianRamirezIDP }}
-
+        apikey: ${{ parameters.token }}
     - id: repository-provision
       name: Repository Provision
       action: trigger:harness-custom-pipeline
@@ -328,7 +325,7 @@ spec:
           nodeVersions: ${{ parameters.nodeVersions }}
           pythonVersions: ${{ parameters.pythonVersions }}
           goVersions: ${{ parameters.goVersions }}
-        apiKeySecret: ${{ CristianRamirezIDP }}
+        apikey: ${{ parameters.token }}
 
   output:
     links:
