@@ -300,7 +300,7 @@ spec:
       name: Project Provision
       action: trigger:harness-custom-pipeline
       input:
-        url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
         inputset:
           project: ${{ parameters.project }}
           project_name: ${{ parameters.project_name }}
@@ -312,7 +312,7 @@ spec:
       name: Infrastructure Provision
       action: trigger:harness-custom-pipeline
       input:
-        url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
         inputset:
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
@@ -325,7 +325,7 @@ spec:
       name: Repository Provision
       action: trigger:harness-custom-pipeline
       input:
-        url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
         inputset:
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
@@ -347,14 +347,6 @@ spec:
         url: '${{ steps.repository-provision.output.pipelineUrl }}'  
 
       
-
-
-
-
-
-
-
-
 
 
 
