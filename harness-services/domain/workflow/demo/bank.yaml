@@ -320,9 +320,12 @@ spec:
       inputset:
         orgId: ${{ parameters.orgId }}
         projectId: ${{ parameters.projectId }}
-        infrastructureType: ${{ parameters.infrastructureType }}
-        vmConfiguration: ${{ parameters.vmConfiguration }}
-        kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
+        repoName: ${{ parameters.repoName }}
+        programmingLanguage: ${{ parameters.programmingLanguage }}
+        javaVersions: ${{ parameters.javaVersions }}
+        nodeVersions: ${{ parameters.nodeVersions }}
+        pythonVersions: ${{ parameters.pythonVersions }}
+        goVersions: ${{ parameters.goVersions }}
       apikey: '${{ parameters.token }}'
 
 output:
@@ -333,3 +336,19 @@ output:
       url: '${{ steps.infrastructure-provision.output.pipelineUrl }}'  
     - title: Pipeline Repository Provision
       url: '${{ steps.repository-provision.output.pipelineUrl }}'  
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
