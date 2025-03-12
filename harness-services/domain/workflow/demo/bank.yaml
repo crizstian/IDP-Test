@@ -19,7 +19,7 @@ spec:
       properties:   
         project:
           title: Nuevo Proyecto
-          type: string
+          type: boolean
           default: true
           ui:widget: radio
         token:
@@ -308,7 +308,7 @@ spec:
           infrastructureType: "${{ parameters.infrastructureType }}"
           vmConfiguration: "${{ parameters.vmConfiguration }}"
           kubernetesConfiguration: "${{ parameters.kubernetesConfiguration }}"
-        apikey: "${{ parameters.token }}"       
+        apikey: ${{ parameters.token }}        
   output:
     links:
       - title: Pipeline Project Provision
