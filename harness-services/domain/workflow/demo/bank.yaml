@@ -27,11 +27,11 @@ spec:
           ui:widget: password
           ui:field: HarnessAuthToken
       dependencies:
-        project:
+        newProject:
           allOf:
             - if:
                 properties:
-                  project:
+                  newProject:
                     const: true
               then:
                 properties:
@@ -41,7 +41,7 @@ spec:
                     description: Name of the new project in Harness
             - if:
                 properties:
-                  project:
+                  newProject:
                     const: false
               then:
                 properties:
@@ -301,3 +301,11 @@ spec:
     links:
       - title: Pipeline Project Provision
         url: '${{ steps.project-provision.output.pipelineUrl }}'
+
+      
+
+
+
+
+
+
