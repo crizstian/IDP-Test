@@ -286,6 +286,17 @@ spec:
                   - scaffolderType
                   - frameworkVersion
   steps:
+    - id: project-provision
+      name: Project Provision
+      action: trigger:harness-custom-pipeline
+      input:
+        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+        inputset:
+          project: ${{ parameters.project }}
+          project_name: ${{ parameters.project_name }}
+          orgId: ${{ parameters.orgId }}
+          projectId: ${{ parameters.projectId }}
+        apikey: ${{ parameters.token }}
     - id: infrastructure-provision
       name: Infrastructure Provision
       action: trigger:harness-custom-pipeline
@@ -297,7 +308,7 @@ spec:
           infrastructureType: ${{ parameters.infrastructureType }}
           vmConfiguration: ${{ parameters.vmConfiguration }}
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
-        apikey: ${{ parameters.token }}
+        apikey: ${{ parameters.token }}        
   output:
     links:
       - title: Pipeline Project Provision
