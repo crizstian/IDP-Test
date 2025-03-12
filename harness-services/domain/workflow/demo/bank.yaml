@@ -287,7 +287,7 @@ spec:
       input:
         url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
         inputset:
-          project: {{ "true" if newProject else "false" }}
+          project: {{ "true" if parameters.newProject else "false" }}
           project_name: ${{ parameters.project_name }}
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
