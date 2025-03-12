@@ -11,7 +11,11 @@ spec:
   type: service
   parameters:
     - title: Project Setup
-      properties:   
+      properties:  
+        orgId:
+          title: Org Identifier
+          type: string
+          ui:field: HarnessOrgPicker  
         newProject:
           title: Nuevo Proyecto
           type: boolean
@@ -35,13 +39,6 @@ spec:
                     title: New Project Name
                     type: string
                     description: Name of the new project in Harness
-                    ui:widget: text
-                    maxLength: 12
-                    pattern: '^([a-z]*)*$'
-                  orgId:
-                    title: Org Identifier
-                    type: string
-                    ui:field: HarnessOrgPicker                    
             - if:
                 properties:
                   project:
@@ -52,12 +49,7 @@ spec:
                     title: Project Identifier
                     description: Harness Project Identifier
                     type: string
-                    ui:field: HarnessProjectPicker
-                  orgId:
-                    title: Org Identifier
-                    description: Harness org Identifier
-                    type: string
-                    ui:field: HarnessAutoOrgPicker                  
+                    ui:field: HarnessProjectPicker                 
     - title: Infrastructure Setup
       properties:
         infrastructureType:
@@ -154,132 +146,140 @@ spec:
                     const: java
               then:
                 properties:
-                  javaVersions:
-                    title: Java Version
-                    type: string
-                    enum:
-                      - "17"
-                      - "11"
-                      - "8"
-                  scaffolderType:
-                    title: Java Framework
-                    type: string
-                    enum:
-                      - spring-boot
-                      - quarkus
-                      - micronaut
-                  frameworkVersion:
-                    title: Framework Version
-                    type: string
-                    enum:
-                      - "3.4.3 (Latest)"
-                      - "3.2.3 (LTS)"
-                      - "2.7.18 (Legacy LTS)"
+                  codeSetup:
+                    type: object
+                    properties:
+                      version:
+                        title: Java Version
+                        type: string
+                        enum:
+                        - "17"
+                        - "11"
+                        - "8"
+                      scaffolderType:
+                        title: Java Framework
+                        type: string
+                        enum:
+                          - spring-boot
+                          - quarkus
+                          - micronaut
+                      frameworkVersion:
+                        title: Framework Version
+                        type: string
+                        enum:
+                          - "3.4.3 (Latest)"
+                          - "3.2.3 (LTS)"
+                          - "2.7.18 (Legacy LTS)"
                 required:
-                  - scaffolderType
-                  - frameworkVersion
+                  - codeSetup
             - if:
                 properties:
                   programmingLanguage:
                     const: node
               then:
                 properties:
-                  nodeVersions:
-                    title: Node.js Version
-                    type: string
-                    enum:
-                      - "18"
-                      - "17"
-                      - "16"
-                      - "15"
-                      - "14"
-                      - "13"
-                      - "12"
-                      - "11"
-                  scaffolderType:
-                    title: Node.js Framework
-                    type: string
-                    enum:
-                      - express
-                      - nest
-                      - fastify
-                  frameworkVersion:
-                    title: Framework Version
-                    type: string
-                    enum:
-                      - "5.0.0 (Latest)"
-                      - "4.18.2 (LTS)"
+                  codeSetup:
+                    type: object
+                    properties:
+                      version:
+                        title: Node.js Version
+                        type: string
+                        enum:
+                          - "18"
+                          - "17"
+                          - "16"
+                          - "15"
+                          - "14"
+                          - "13"
+                          - "12"
+                          - "11"
+                      scaffolderType:
+                        title: Node.js Framework
+                        type: string
+                        enum:
+                          - express
+                          - nest
+                          - fastify
+                      frameworkVersion:
+                        title: Framework Version
+                        type: string
+                        enum:
+                          - "5.0.0 (Latest)"
+                          - "4.18.2 (LTS)"
                 required:
-                  - scaffolderType
-                  - frameworkVersion
+                  - codeSetup
             - if:
                 properties:
                   programmingLanguage:
                     const: python
               then:
                 properties:
-                  pythonVersions:
-                    title: Python Version
-                    type: string
-                    enum:
-                      - "3.12"
-                      - "3.11"
-                      - "3.10"
-                      - "3.9"
-                      - "3.8"
-                      - "3.7"
-                      - "3.6"
-                      - "3.5"
-                  scaffolderType:
-                    title: Python Framework
-                    type: string
-                    enum:
-                      - fastapi
-                      - django
-                      - flask
-                  frameworkVersion:
-                    title: Framework Version
-                    type: string
-                    enum:
-                      - "0.109.0 (Latest)"
-                      - "0.108.0 (Stable)"
+                  codeSetup:
+                    type: object
+                    properties:
+                      version:
+                        title: Python Version
+                        type: string
+                        enum:
+                          - "3.12"
+                          - "3.11"
+                          - "3.10"
+                          - "3.9"
+                          - "3.8"
+                          - "3.7"
+                          - "3.6"
+                          - "3.5"
+                      scaffolderType:
+                        title: Python Framework
+                        type: string
+                        enum:
+                          - fastapi
+                          - django
+                          - flask
+                      frameworkVersion:
+                        title: Framework Version
+                        type: string
+                        enum:
+                          - "0.109.0 (Latest)"
+                          - "0.108.0 (Stable)"
                 required:
-                  - scaffolderType
-                  - frameworkVersion
+                  - codeSetup
             - if:
                 properties:
                   programmingLanguage:
                     const: go
               then:
                 properties:
-                  goVersions:
-                    title: Go Version
-                    type: string
-                    enum:
-                      - "1.21"
-                      - "1.20"
-                      - "1.19"
-                      - "1.18"
-                      - "1.17"
-                      - "1.16"
-                      - "1.15"
-                      - "1.14"
-                  scaffolderType:
-                    title: Go Framework
-                    type: string
-                    enum:
-                      - gin
-                      - echo
-                      - fiber
-                  frameworkVersion:
-                    title: Framework Version
-                    type: string
-                    enum:
-                      - "1.9.1 (Latest)"
-                      - "1.8.2 (Stable)"
+                  codeSetup:
+                    type: object
+                    properties:
+                      version:
+                        title: Go Version
+                        type: string
+                        enum:
+                          - "1.21"
+                          - "1.20"
+                          - "1.19"
+                          - "1.18"
+                          - "1.17"
+                          - "1.16"
+                          - "1.15"
+                          - "1.14"
+                      scaffolderType:
+                        title: Go Framework
+                        type: string
+                        enum:
+                          - gin
+                          - echo
+                          - fiber
+                      frameworkVersion:
+                        title: Framework Version
+                        type: string
+                        enum:
+                          - "1.9.1 (Latest)"
+                          - "1.8.2 (Stable)"
                 required:
-                  - scaffolderType
-                  - frameworkVersion
+                  - codeSetup
   steps:
     - id: project-provision
       name: Project Provision
@@ -295,20 +295,9 @@ spec:
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
           repoName: ${{ parameters.repoName }}
           programmingLanguage: ${{ parameters.programmingLanguage }}
-          javaVersions: ${{ parameters.javaVersions }}
-          nodeVersions: ${{ parameters.nodeVersions }}
-          pythonVersions: ${{ parameters.pythonVersions }}
-          goVersions: ${{ parameters.goVersions }}
+          codeSetup: ${{ parameters.codeSetup }}
         apikey: ${{ parameters.token }}
   output:
     links:
       - title: Pipeline Project Provision
         url: '${{ steps.project-provision.output.pipelineUrl }}'
-
-      
-
-
-
-
-
-
