@@ -11,11 +11,6 @@ spec:
   type: service
   parameters:
     - title: Project Setup
-      required:
-        - project
-        - project_name
-        - orgId
-        - projectId
       properties:   
         project:
           title: Nuevo Proyecto
@@ -286,24 +281,33 @@ spec:
                   - scaffolderType
                   - frameworkVersion
   steps:
-    - id: infrastructure-provision
-      name: Infrastructure Provision
+    - id: project-provision
+      name: Project Provision
       action: trigger:harness-custom-pipeline
       input:
         url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
         inputset:
+          project: "${{ parameters.project }}"
+          project_name: ${{ parameters.project_name }}
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
           infrastructureType: ${{ parameters.infrastructureType }}
           vmConfiguration: ${{ parameters.vmConfiguration }}
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
+          repoName: ${{ parameters.repoName }}
+          programmingLanguage: ${{ parameters.programmingLanguage }}
+          javaVersions: ${{ parameters.javaVersions }}
+          nodeVersions: ${{ parameters.nodeVersions }}
+          pythonVersions: ${{ parameters.pythonVersions }}
+          goVersions: ${{ parameters.goVersions }}
         apikey: ${{ parameters.token }}
   output:
     links:
       - title: Pipeline Project Provision
-        url: '${{ steps.project-provision.output.pipelineUrl }}'  
+        url: '${{ steps.project-provision.output.pipelineUrl }}'
 
       
+
 
 
 
