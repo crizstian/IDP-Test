@@ -39,6 +39,7 @@ spec:
                     title: New Project Name
                     type: string
                     description: Name of the new project in Harness
+                    ui:emptyValue: ''
             - if:
                 properties:
                   newProject:
@@ -291,6 +292,7 @@ spec:
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
         apikey: ${{ parameters.token }}
+        showOutputVariables: true
     - id: infrastructure-provision
       name: infrastructure Provision
       action: trigger:harness-custom-pipeline
@@ -301,13 +303,14 @@ spec:
           vmConfiguration: ${{ parameters.vmConfiguration }}
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
         apikey: ${{ parameters.token }}
+        showOutputVariables: true
     - id: repository-provision
       name: repository Provision
       action: trigger:harness-custom-pipeline
       input:
         url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDPRepoOnboarding/pipeline-studio?storeType=INLINE"
         inputset:
-          project: ${{ parameters.project_name }}
+          project: ${{ steps.project-provision.output['pipeline.stages.IDP.spec.execution.steps.Print_vars.output.outputVariables.project'] }}
           organization: ${{ parameters.orgId }}
           repoName: ${{ parameters.repoName }}
           programmingLanguage: ${{ parameters.programmingLanguage }}
@@ -316,6 +319,7 @@ spec:
           repoDescription: "demo"
           namespace: ${{ parameters.kubernetesConfiguration.namespace }}
         apikey: ${{ parameters.token }}
+        showOutputVariables: true
   output:
     links:
       - title: Pipeline Project Provision
