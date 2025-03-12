@@ -6,21 +6,27 @@ metadata:
   description: Template for creating and deploying services with infrastructure provisioning
   tags:
     - harness
-    - recommended
-    - service
 spec:
   owner: cristian.ramirez@harness.io
   type: service
-
   parameters:
     - title: Project Setup
-      properties:
+      required:
+        - project
+        - project_name
+        - orgId
+        - projectId
+      properties:   
         project:
           title: Nuevo Proyecto
           type: boolean
           default: true
           ui:widget: radio
-
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken
       dependencies:
         project:
           allOf:
@@ -35,6 +41,8 @@ spec:
                     type: string
                     description: Name of the new project in Harness
                     ui:widget: text
+                    maxLength: 12
+                    pattern: '^([a-z]*)*$'
                   orgId:
                     title: Org Identifier
                     type: string
@@ -55,7 +63,6 @@ spec:
                     description: Harness org Identifier
                     type: string
                     ui:field: HarnessAutoOrgPicker                  
-
     - title: Infrastructure Setup
       properties:
         infrastructureType:
@@ -65,7 +72,6 @@ spec:
           enum:
             - vm
             - kubernetes
-
       dependencies:
         infrastructureType:
           allOf:
@@ -128,9 +134,8 @@ spec:
                           default: true
                 required:
                   - kubernetesConfiguration                  
-
     - title: Repository Setup
-      properties:
+      properties:  
         repoName:
           title: Repository Name
           type: string
@@ -145,7 +150,6 @@ spec:
             - node
             - python
             - go
-
       dependencies:
         programmingLanguage:
           allOf:
@@ -179,7 +183,6 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-
             - if:
                 properties:
                   programmingLanguage:
@@ -214,7 +217,6 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-
             - if:
                 properties:
                   programmingLanguage:
@@ -249,7 +251,6 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-
             - if:
                 properties:
                   programmingLanguage:
@@ -284,68 +285,25 @@ spec:
                 required:
                   - scaffolderType
                   - frameworkVersion
-  
-
   steps:
-    - id: project-provision
-      name: Project Provision
-      action: trigger:harness-custom-pipeline
-      input:
-        url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
-        inputset:
-          project: ${{ parameters.project }}
-          project_name: ${{ parameters.project_name }}
-          orgId: ${{ parameters.orgId }}
-          projectId: ${{ parameters.projectId }}
-        apikey: '${{ parameters.token }}'
-
     - id: infrastructure-provision
       name: Infrastructure Provision
       action: trigger:harness-custom-pipeline
       input:
-        url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
         inputset:
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
           infrastructureType: ${{ parameters.infrastructureType }}
           vmConfiguration: ${{ parameters.vmConfiguration }}
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
-        apikey: '${{ parameters.token }}'
-
-    - id: repository-provision
-      name: Repository Provision
-      action: trigger:harness-custom-pipeline
-      input:
-        url: "https://app.harness.io/ng/account/<+account.identifier>/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
-        inputset:
-          orgId: ${{ parameters.orgId }}
-          projectId: ${{ parameters.projectId }}
-          repoName: ${{ parameters.repoName }}
-          programmingLanguage: ${{ parameters.programmingLanguage }}
-          javaVersions: ${{ parameters.javaVersions }}
-          nodeVersions: ${{ parameters.nodeVersions }}
-          pythonVersions: ${{ parameters.pythonVersions }}
-          goVersions: ${{ parameters.goVersions }}
-        apikey: '${{ parameters.token }}'
-
+        apikey: ${{ parameters.token }}
   output:
     links:
       - title: Pipeline Project Provision
         url: '${{ steps.project-provision.output.pipelineUrl }}'  
-      - title: Pipeline Infrastructure Provision
-        url: '${{ steps.infrastructure-provision.output.pipelineUrl }}'  
-      - title: Pipeline Repository Provision
-        url: '${{ steps.repository-provision.output.pipelineUrl }}'  
 
       
-
-
-
-
-
-
-
-
 
 
 
