@@ -307,7 +307,7 @@ spec:
       input:
         url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDP_Infrastructure_Setup/pipeline-studio?storehttps://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDPRepoOnboarding/pipeline-studio?storeType=INLINE"
         inputset:
-          project: ${{ parameters.project_name != "" ? parameters.project_name : parameters.projectId }}
+          project: ${{ parameters.project_name }}
           organization: ${{ parameters.orgId }}
           repoName: ${{ parameters.repoName }}
           programmingLanguage: ${{ parameters.programmingLanguage }}
