@@ -19,7 +19,7 @@ spec:
       properties:   
         project:
           title: Nuevo Proyecto
-          type: boolean
+          type: string
           default: true
           ui:widget: radio
         token:
@@ -292,23 +292,23 @@ spec:
       input:
         url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
         inputset:
-          project: ${{ parameters.project }}
-          project_name: ${{ parameters.project_name }}
-          orgId: ${{ parameters.orgId }}
-          projectId: ${{ parameters.projectId }}
-        apikey: ${{ parameters.token }}
+          project: "${{ parameters.project }}"
+          project_name: "${{ parameters.project_name }}"
+          orgId: "${{ parameters.orgId }}"
+          projectId: "${{ parameters.projectId }}"
+        apikey: "${{ parameters.token }}"
     - id: infrastructure-provision
       name: Infrastructure Provision
       action: trigger:harness-custom-pipeline
       input:
         url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
         inputset:
-          orgId: ${{ parameters.orgId }}
-          projectId: ${{ parameters.projectId }}
-          infrastructureType: ${{ parameters.infrastructureType }}
-          vmConfiguration: ${{ parameters.vmConfiguration }}
-          kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
-        apikey: ${{ parameters.token }}        
+          orgId: "${{ parameters.orgId }}"
+          projectId: "${{ parameters.projectId }}"
+          infrastructureType: "${{ parameters.infrastructureType }}"
+          vmConfiguration: "${{ parameters.vmConfiguration }}"
+          kubernetesConfiguration: "${{ parameters.kubernetesConfiguration }}"
+        apikey: "${{ parameters.token }}"       
   output:
     links:
       - title: Pipeline Project Provision
