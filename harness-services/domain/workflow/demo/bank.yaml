@@ -285,7 +285,7 @@ spec:
       name: Project Provision
       action: trigger:harness-custom-pipeline
       input:
-        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDP_Provision_Project/pipeline-studio?storeType=INLINE"
         inputset:
           project_name: ${{ parameters.project_name }}
           orgId: ${{ parameters.orgId }}
@@ -295,14 +295,26 @@ spec:
       name: infrastructure Provision
       action: trigger:harness-custom-pipeline
       input:
-        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/all/orgs/sandbox/projects/CristianRamirez/pipelines/demo_dev_env/pipeline-studio?storeType=INLINE"
+        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDP_Infrastructure_Setup/pipeline-studio?storeType=INLINE"
         inputset:
-          project_name: ${{ parameters.project_name }}
-          orgId: ${{ parameters.orgId }}
-          projectId: ${{ parameters.projectId }}
           infrastructureType: ${{ parameters.infrastructureType }}
           vmConfiguration: ${{ parameters.vmConfiguration }}
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
+        apikey: ${{ parameters.token }}
+    - id: repository-provision
+      name: repository Provision
+      action: trigger:harness-custom-pipeline
+      input:
+        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDP_Infrastructure_Setup/pipeline-studio?storehttps://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDPRepoOnboarding/pipeline-studio?storeType=INLINE"
+        inputset:
+          project: ${{ parameters.project_name != "" ? parameters.project_name : parameters.projectId }}
+          organization: ${{ parameters.orgId }}
+          repoName: ${{ parameters.repoName }}
+          programmingLanguage: ${{ parameters.programmingLanguage }}
+          template: ${{ parameters.codeSetup }}
+          repoDefaultBranch: "main"
+          repoDescription: "demo"
+          namespace: ${{ parameters.kubernetesConfiguration.namespace }}
         apikey: ${{ parameters.token }}
   output:
     links:
@@ -310,3 +322,5 @@ spec:
         url: '${{ steps.project-provision.output.pipelineUrl }}'
       - title: Pipeline Infrastructure Provision
         url: '${{ steps.infrastructure-provision.output.pipelineUrl }}'
+      - title: Pipeline Repository Provision
+        url: '${{ steps.repository-provision.output.pipelineUrl }}'
