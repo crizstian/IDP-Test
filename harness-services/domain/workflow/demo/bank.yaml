@@ -39,7 +39,7 @@ spec:
                     title: New Project Name
                     type: string
                     description: Name of the new project in Harness
-                    ui:emptyValue: ''
+                    default: 'default'
             - if:
                 properties:
                   newProject:
@@ -51,7 +51,7 @@ spec:
                     description: Harness Project Identifier
                     type: string
                     ui:field: HarnessProjectPicker
-                    ui:emptyValue: ''
+                    default: 'default'
   
   steps:
     - id: project-provision
