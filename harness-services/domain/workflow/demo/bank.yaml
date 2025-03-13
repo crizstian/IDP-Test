@@ -311,6 +311,7 @@ spec:
           project_name: ${{ parameters.project_name }}
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
+          programmingLanguage: ${{ parameters.programmingLanguage }}
         apikey: ${{ parameters.token }}
     - id: infrastructure-provision
       name: infrastructure Provision
