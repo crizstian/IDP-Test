@@ -50,79 +50,89 @@ spec:
                     title: Project Identifier
                     description: Harness Project Identifier
                     type: string
-                    ui:field: HarnessProjectPicker                 
-    - title: Infrastructure Setup
-      properties:
-        infrastructureType:
-          title: Infrastructure Type
-          type: string
-          description: Select infrastructure type
-          enum:
-            - vm
-            - kubernetes
-      dependencies:
-        infrastructureType:
-          allOf:
-            - if:
-                properties:
-                  infrastructureType:
-                    const: vm
-              then:
-                properties:
-                  vmConfiguration:
-                      type: object
-                      properties:
-                        vmName:
-                          title: VM Name
-                          type: string
-                        vmRam:
-                          title: RAM (GB)
-                          type: number
-                          default: 4
-                        vmCpu:
-                          title: CPU Cores
-                          type: number
-                          default: 2
-                        vmDisk:
-                          title: Disk Size (GB)
-                          type: number
-                          default: 50
-                        cloudProjectId:
-                          title: Cloud Project ID
-                          type: string
-                          description: AWS ID/OpenShift Project/etc
-                        ports:
-                          title: Available Ports
-                          type: array
-                          items:
-                            type: number
-                          default: [80, 443]
-                required:
-                  - vmConfiguration
-            - if:
-                properties:
-                  infrastructureType:
-                    const: kubernetes
-              then:
-                properties:
-                  kubernetesConfiguration:
-                      type: object
-                      properties:
-                        cluster:
-                          title: Kubernetes Namespace
-                          type: string
-                          enum: ["dev", "sit"]
-                          default: dev
-                        namespace:
-                          title: Kubernetes Namespace
-                          type: string
-                        createIngress:
-                          title: Generate Kubernetes Ingress
-                          type: boolean
-                          default: true
-                required:
-                  - kubernetesConfiguration                  
-    - title: Repository Setup
+                    ui:field: HarnessProjectPicker
+                    ui:emptyValue: ''
+    # - title: Infrastructure Setup
+    #   properties:
+    #     infrastructureType:
+    #       title: Infrastructure Type
+    #       type: string
+    #       description: Select infrastructure type
+    #       enum:
+    #         - vm
+    #         - kubernetes
+    #   dependencies:
+    #     infrastructureType:
+    #       allOf:
+    #         - if:
+    #             properties:
+    #               infrastructureType:
+    #                 const: vm
+    #           then:
+    #             properties:
+    #               vmConfiguration:
+    #                   type: object
+    #                   properties:
+    #                     vmName:
+    #                       title: VM Name
+    #                       type: string
+    #                     instanceType:
+    #                       title: Instance Type
+    #                       type: string
+    #                       enum:
+    #                         - n2-standard-2
+    #                         - n2-standard-4
+    #                         - n2-standard-8
+    #                         - n2-standard-16
+    #                       default: n2-standard-2
+    #                     vmDisk:
+    #                       title: Disk Size (GB)
+    #                       type: number
+    #                       enum:
+    #                         - 30
+    #                         - 50
+    #                         - 100
+    #                       default: 50
+    #                     cloudProjectId:
+    #                       title: Cloud Project ID
+    #                       type: string
+    #                       enum:
+    #                         - bank-dev
+    #                         - bank-sit
+    #                       default: bank-dev
+    #                       description: AWS ID/OpenShift Project/etc
+    #                     ports:
+    #                       title: Available Ports
+    #                       type: array
+    #                       items:
+    #                         type: string
+    #                       default: ["80", "443"]
+    #             required:
+    #               - vmConfiguration
+    #         - if:
+    #             properties:
+    #               infrastructureType:
+    #                 const: kubernetes
+    #           then:
+    #             properties:
+    #               kubernetesConfiguration:
+    #                   type: object
+    #                   properties:
+    #                     cluster:
+    #                       title: Kubernetes Namespace
+    #                       type: string
+    #                       enum: ["dev", "sit"]
+    #                       default: dev
+    #                     namespace:
+    #                       title: Kubernetes Namespace
+    #                       type: string
+    #                     createIngress:
+    #                       title: Generate Kubernetes Ingress
+    #                       type: boolean
+    #                       default: true
+    #             required:
+    #               - kubernetesConfiguration                  
+    # - title: Repository Setup
       properties:  
         repoName:
           title: Repository Name
@@ -293,18 +303,18 @@ spec:
           projectId: ${{ parameters.projectId }}
         apikey: ${{ parameters.token }}
         showOutputVariables: true
-    - id: infrastructure-provision
-      name: infrastructure Provision
-      action: trigger:harness-custom-pipeline
-      input:
-        url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDP_Infrastructure_Setup/pipeline-studio?storeType=INLINE"
-        inputset:
-          infrastructureType: ${{ parameters.infrastructureType }}
-          vmConfiguration: ${{ parameters.vmConfiguration }}
-          kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
-        apikey: ${{ parameters.token }}
-        showOutputVariables: true
-    - id: repository-provision
+    # - id: infrastructure-provision
+    #   name: infrastructure Provision
+    #   action: trigger:harness-custom-pipeline
+    #   input:
+    #     url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDP_Infrastructure_Setup/pipeline-studio?storeType=INLINE"
+    #     inputset:
+    #       infrastructureType: ${{ parameters.infrastructureType }}
+    #       vmConfiguration: ${{ parameters.vmConfiguration }}
+    #       kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
+    #     apikey: ${{ parameters.token }}
+    #     showOutputVariables: true
+    # - id: repository-provision
       name: repository Provision
       action: trigger:harness-custom-pipeline
       input:
@@ -324,7 +334,7 @@ spec:
     links:
       - title: Pipeline Project Provision
         url: '${{ steps.project-provision.output.pipelineUrl }}'
-      - title: Pipeline Infrastructure Provision
-        url: '${{ steps.infrastructure-provision.output.pipelineUrl }}'
-      - title: Pipeline Repository Provision
-        url: '${{ steps.repository-provision.output.pipelineUrl }}'
+      # - title: Pipeline Infrastructure Provision
+      #   url: '${{ steps.infrastructure-provision.output.pipelineUrl }}'
+      # - title: Pipeline Repository Provision
+      #   url: '${{ steps.repository-provision.output.pipelineUrl }}'
