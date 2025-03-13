@@ -102,6 +102,15 @@ spec:
                             - bank-sit
                           default: bank-dev
                           description: AWS ID/OpenShift Project/etc
+                        zone:
+                          title: Cloud Project ID
+                          type: string
+                          enum:
+                            - us-central1-a
+                            - us-central1-b
+                            - us-central1-c
+                          default: us-central1-a
+                          description: AWS ID/OpenShift Project/etc
                         ports:
                           title: Available Ports
                           type: array
