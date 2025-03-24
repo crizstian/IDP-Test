@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+spec:
+  owner: SalesEngineers
+metadata:
+  name: sandbox
+  description: harness demo env for SEs
+  tags: []
