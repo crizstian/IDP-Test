@@ -1,0 +1,30 @@
+kind: Component
+spec:
+  type: Service
+  lifecycle: prod
+  owner: cristian.ramirez@harness.io
+  system: sandbox
+apiVersion: backstage.io/v1alpha1
+metadata:
+  name: my-service-123
+  description: my-service-123 service
+  links:
+    - url: http://34.67.7.165/
+      title: Prod Website
+      icon: dashboard
+      type: Boutique FrontEnd
+    - url: http://34.28.46.65
+      title: QA Website
+      icon: dashboard
+      type: Boutique FrontEnd
+    - url: http://34.135.60.81/
+      title: Dev Website
+      icon: dashboard
+      type: Boutique FrontEnd
+  tags: 
+    - java
+  annotations:
+    harness.io/project-url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/home/orgs/sandbox/projects/cristianpatrickdemo123/details
+    harness.io/cd-serviceId: myservice123
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: crizstian/my-service-123
