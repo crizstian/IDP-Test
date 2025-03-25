@@ -6,7 +6,7 @@ spec:
 metadata:
   name: new-demo-project
   links:
-    - url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/home/orgs/sandbox/projects/none/details
+    - url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/home/orgs/sandbox/projects/newdemoproject/details
       title:  new-demo-project
       icon: dashboard
       type: new-demo-project
