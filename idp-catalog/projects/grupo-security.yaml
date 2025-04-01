@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+spec:
+  owner: cristian.ramirez@harness.io
+  domain: Sandbox
+metadata:
+  name: grupo-security
+  links:
+    - url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/home/orgs/sandbox/projects/gruposecurity/details
+      title:  grupo-security
+      icon: dashboard
+      type: grupo-security
+  description: "Documentation: https://harness.atlassian.net/wiki/spaces/SE/pages/21066940575/Banking+Demo"
+  tags: []
