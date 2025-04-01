@@ -1,0 +1,17 @@
+kind: Component
+spec:
+  type: Service
+  lifecycle: dev
+  owner: cristian.ramirez@harness.io
+  system: grupo-security
+apiVersion: backstage.io/v1alpha1
+metadata:
+  name: service-demo
+  description: service-demo service
+  tags: 
+    - java
+  annotations:
+    harness.io/project-url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/home/orgs/sandbox/projects/gruposecurity/details
+    harness.io/cd-serviceId: servicedemo
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: crizstian/service-demo
