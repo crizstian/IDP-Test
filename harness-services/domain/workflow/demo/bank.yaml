@@ -356,6 +356,8 @@ spec:
       - title: Pipeline Project Provision
         url: '${{ steps.project-provision.output.pipelineUrl }}'
       - title: Pipeline Infrastructure Provision
+        url: '${{ steps.repository-provision.output.pipelineUrl }}'
+      - title: Pipeline Repository Provision
         url: '${{ steps.infrastructure-provision.output.pipelineUrl }}'
       - title: Pipeline Repository Provision
-        url: '${{ steps.repository-provision.output.pipelineUrl }}'
+        url: '${{ steps.cleanup-environment.output.pipelineUrl }}'
