@@ -1,11 +1,15 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: service-deployment-template
-  title: Service Deployment Template
-  description: Template for creating and deploying services with infrastructure provisioning
+  name: full-onboarding-workflow
+  title: Full Onboarding Workflow
+  description: Workflow that onboards projects, repos and infraestructure, pipeline, trigger and inputset
   tags:
-    - harness
+    - harness project
+    - harness repo
+    - harness service
+    - harness pipeline
+    - Infraestructure
 spec:
   owner: cristian.ramirez@harness.io
   type: service
