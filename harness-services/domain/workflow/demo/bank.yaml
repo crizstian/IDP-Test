@@ -5,11 +5,11 @@ metadata:
   title: Full Onboarding Workflow
   description: Workflow that onboards projects, repos and infraestructure, pipeline, trigger and inputset
   tags:
-    - harness-project
-    - harness-repo
-    - harness-service
-    - harness-pipeline
-    - Infraestructure-GCP
+    - project
+    - repo
+    - service
+    - pipeline
+    - iac_gcp
 spec:
   owner: cristian.ramirez@harness.io
   type: service
