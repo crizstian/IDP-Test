@@ -9,7 +9,7 @@ metadata:
     - repo
     - service
     - pipeline
-    - iac_gcp
+    - iac-gcp
 spec:
   owner: cristian.ramirez@harness.io
   type: service
