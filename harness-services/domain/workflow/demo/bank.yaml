@@ -312,15 +312,16 @@ spec:
                                 title: Container name
                                 type: string
                               CPU:
-                                title: Container name
+                                title: Container CPU
                                 type: string
-                                enum: ["500m", "1000m", "1500m"]
+                                enum: ["500m", "1000m", "1500m", "2000m"]
                                 default: 500m
                               Memory:
-                                title: Container name
+                                title: Container Memory
                                 type: string
-                                enum: ["500mb", "1Gi", "1.5Gi", "2Gi"]
-                                default: 500m
+                                enum: ["256Mi", "512Mi", "1Gi", "1.5Gi", "2Gi", "4Gi", "8Gi", "16Gi"]
+                                default: 512Mi
+                          default: []
                                 
                 required:
                   - kubernetesConfiguration 
