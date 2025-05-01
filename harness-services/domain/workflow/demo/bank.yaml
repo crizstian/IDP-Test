@@ -301,7 +301,7 @@ spec:
                         containerReplicas:
                           title: Container replicas
                           type: string
-                          default: 3
+                          default: "3"
                         containers:
                           title: Container Resources
                           type: array
