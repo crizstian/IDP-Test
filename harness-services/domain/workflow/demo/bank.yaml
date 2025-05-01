@@ -364,6 +364,7 @@ spec:
           infrastructureType: ${{ parameters.infrastructureType }}
           vmConfiguration: ${{ parameters.vmConfiguration }}
           kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
+          repoName: ${{ parameters.repoName }}
         apikey: ${{ parameters.token }}       
     - id: cleanup-environment
       name: Clean Demo Resources
