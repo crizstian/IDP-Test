@@ -298,6 +298,30 @@ spec:
                           title: Generate Kubernetes Ingress
                           type: boolean
                           default: true
+                        containerReplicas:
+                          title: Container replicas
+                          type: string
+                          default: 3
+                        containers:
+                          title: Container Resources
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                title: Container name
+                                type: string
+                              CPU:
+                                title: Container name
+                                type: string
+                                enum: ["500m", "1000m", "1500m"]
+                                default: 500m
+                              Memory:
+                                title: Container name
+                                type: string
+                                enum: ["500mb", "1Gi", "1.5Gi", "2Gi"]
+                                default: 500m
+                                
                 required:
                   - kubernetesConfiguration 
 
