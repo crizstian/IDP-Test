@@ -287,9 +287,9 @@ spec:
                       type: object
                       properties:
                         cluster:
-                          title: Kubernetes Namespace
+                          title: Kubernetes Cluster
                           type: string
-                          enum: ["dev", "sit"]
+                          enum: ["sesandboxkubernetes", "latamsandboxkubernetes"]
                           default: dev
                         namespace:
                           title: Kubernetes Namespace
