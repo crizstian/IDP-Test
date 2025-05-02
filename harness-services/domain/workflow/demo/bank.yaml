@@ -551,6 +551,7 @@ spec:
           orgId: ${{ parameters.orgId }}
           projectId: ${{ parameters.projectId }}
           repoName: ${{ parameters.repoName }}
+          infraSetup: ${{ parameters.infraSetup }}
         apikey: ${{ parameters.token }}       
   output:
     links:
