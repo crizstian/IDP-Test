@@ -289,7 +289,14 @@ spec:
                         cluster:
                           title: Kubernetes Cluster
                           type: string
-                          enum: ["sesandboxkubernetes", "latamsandboxkubernetes"]
+                          enum:
+                            - sesandboxkubernetes
+                            - latamsandboxkubernetes
+                            - ne
+                            - ns
+                          enumNames:
+                            - SE Sandbox
+                            - SE Latam GKE
                           default: dev
                         namespace:
                           title: Kubernetes Namespace
