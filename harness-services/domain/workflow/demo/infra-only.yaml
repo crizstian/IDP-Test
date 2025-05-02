@@ -12,6 +12,11 @@ spec:
   parameters:
     - title: Infrastructure Setup
       properties:
+        token:
+          title: Harness Token
+          type: string
+          ui:widget: password
+          ui:field: HarnessAuthToken
         cloud:
             title: Cloud Environment
             type: string
