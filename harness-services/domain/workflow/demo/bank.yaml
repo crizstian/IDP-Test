@@ -213,123 +213,291 @@ spec:
 
     - title: Infrastructure Setup
       properties:
-        infrastructureType:
-          title: Infrastructure Type
-          type: string
-          description: Select infrastructure type
-          enum:
-            - vm
-            - kubernetes
+        cloud:
+            title: Cloud Environment
+            type: string
+            description: Select cloud
+            enum:
+              - AWS
+              - GCP
+              - BareMetal
       dependencies:
-        infrastructureType:
+        cloud:
           allOf:
             - if:
                 properties:
-                  infrastructureType:
-                    const: vm
+                  cloud:
+                    const: AWS
               then:
                 properties:
-                  vmConfiguration:
-                      type: object
-                      properties:
-                        vmName:
-                          title: VM Name
-                          type: string
-                        instanceType:
-                          title: Instance Type
-                          type: string
-                          enum:
-                            - n2-standard-2
-                            - n2-standard-4
-                            - n2-standard-8
-                            - n2-standard-16
-                          default: n2-standard-2
-                        vmDisk:
-                          title: Disk Size (GB)
-                          type: number
-                          enum:
-                            - 30
-                            - 50
-                            - 100
-                          default: 50
-                        cloudProjectId:
-                          title: Cloud Project ID
-                          type: string
-                          enum:
-                            - bank-dev
-                            - bank-sit
-                          default: bank-dev
-                          description: AWS ID/OpenShift Project/etc
-                        zone:
-                          title: Cloud Project ID
-                          type: string
-                          enum:
-                            - us-central1-a
-                            - us-central1-b
-                            - us-central1-c
-                          default: us-central1-a
-                          description: AWS ID/OpenShift Project/etc
-                        ports:
-                          title: Available Ports
-                          type: array
-                          items:
-                            type: string
-                          default: ["80", "443"]
+                  infraSetup:
+                    type: object
+                    properties:
+                      infrastructureType:
+                        title: Infrastructure Type
+                        type: string
+                        description: Select infrastructure type
+                        enum:
+                          - vm
+                      dependencies:
+                        infrastructureType:
+                          allOf:
+                            - if:
+                                properties:
+                                  infrastructureType:
+                                    const: vm
+                              then:
+                                properties:
+                                  vmConfiguration:
+                                      type: object
+                                      properties:
+                                        vmName:
+                                          title: VM Name
+                                          type: string
+                                        instanceType:
+                                          title: Instance Type
+                                          type: string
+                                          enum:
+                                            - t2.micro
+                                            - t2.small
+                                            - t2.large
+                                            - t2.xlarge
+                                          default: t2.small
+                                        vmDisk:
+                                          title: Disk Size (GB)
+                                          type: number
+                                          enum:
+                                            - 30
+                                            - 50
+                                            - 100
+                                          default: 50
+                                        cloudProjectId:
+                                          title: AWS Account
+                                          type: string
+                                          enum:
+                                            - sales
+                                            - demo
+                                          default: sales
+                                          description: AWS ID
+                                        zone:
+                                          title: AWS Region
+                                          type: string
+                                          enum:
+                                            - us-east-1
+                                            - us-east-2
+                                            - us-west-1
+                                            - us-west-2
+                                          default: us-east-1
+                                          description: AWS Region
+                                        ports:
+                                          title: Available Ports
+                                          type: array
+                                          items:
+                                            type: string
+                                          default: ["80", "443"]
+                                required:
+                                  - vmConfiguration
                 required:
-                  - vmConfiguration
+                  - infraSetup
             - if:
                 properties:
-                  infrastructureType:
-                    const: kubernetes
+                  cloud:
+                    const: GCP
               then:
                 properties:
-                  kubernetesConfiguration:
-                      type: object
-                      properties:
-                        cluster:
-                          title: Kubernetes Cluster
-                          type: string
-                          enum:
-                            - sesandboxkubernetes
-                            - latamsandboxkubernetes
-                          enumNames:
-                            - SE Sandbox
-                            - SE Latam GKE
-                          default: dev
-                        namespace:
-                          title: Kubernetes Namespace
-                          type: string
-                        createIngress:
-                          title: Generate Kubernetes Ingress
-                          type: boolean
-                          default: true
-                        containerReplicas:
-                          title: Container replicas
-                          type: string
-                          default: "3"
-                        containers:
-                          title: Container Resources
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                title: Container name
-                                type: string
-                              CPU:
-                                title: Container CPU
-                                type: string
-                                enum: ["100m","200m","300m","400m","500m", "1000m", "1500m", "2000m"]
-                                default: 500m
-                              Memory:
-                                title: Container Memory
-                                type: string
-                                enum: ["256Mi", "512Mi", "1Gi", "1.5Gi", "2Gi", "4Gi", "8Gi", "16Gi"]
-                                default: 512Mi
-                          default: []
-                                
+                  infraSetup:
+                    type: object
+                    properties:
+                      infrastructureType:
+                        title: Infrastructure Type
+                        type: string
+                        description: Select infrastructure type
+                        enum:
+                          - vm
+                          - kubernetes
+                      dependencies:
+                        infrastructureType:
+                          allOf:
+                            - if:
+                                properties:
+                                  infrastructureType:
+                                    const: vm
+                              then:
+                                properties:
+                                  vmConfiguration:
+                                      type: object
+                                      properties:
+                                        vmName:
+                                          title: VM Name
+                                          type: string
+                                        instanceType:
+                                          title: Instance Type
+                                          type: string
+                                          enum:
+                                            - n2-standard-2
+                                            - n2-standard-4
+                                            - n2-standard-8
+                                            - n2-standard-16
+                                          default: n2-standard-2
+                                        vmDisk:
+                                          title: Disk Size (GB)
+                                          type: number
+                                          enum:
+                                            - 30
+                                            - 50
+                                            - 100
+                                          default: 50
+                                        cloudProjectId:
+                                          title: Cloud Project ID
+                                          type: string
+                                          enum:
+                                            - bank-dev
+                                            - bank-sit
+                                          default: bank-dev
+                                          description: AWS ID/OpenShift Project/etc
+                                        zone:
+                                          title: Cloud Project ID
+                                          type: string
+                                          enum:
+                                            - us-central1-a
+                                            - us-central1-b
+                                            - us-central1-c
+                                          default: us-central1-a
+                                          description: AWS ID/OpenShift Project/etc
+                                        ports:
+                                          title: Available Ports
+                                          type: array
+                                          items:
+                                            type: string
+                                          default: ["80", "443"]
+                                required:
+                                  - vmConfiguration
+                            - if:
+                                properties:
+                                  infrastructureType:
+                                    const: kubernetes
+                              then:
+                                properties:
+                                  kubernetesConfiguration:
+                                      type: object
+                                      properties:
+                                        cluster:
+                                          title: Kubernetes Cluster
+                                          type: string
+                                          enum:
+                                            - sesandboxkubernetes
+                                            - latamsandboxkubernetes
+                                          enumNames:
+                                            - SE Sandbox
+                                            - SE Latam GKE
+                                        namespace:
+                                          title: Kubernetes Namespace
+                                          type: string
+                                        createIngress:
+                                          title: Generate Kubernetes Ingress
+                                          type: boolean
+                                          default: true
+                                        containerReplicas:
+                                          title: Container replicas
+                                          type: string
+                                          default: "3"
+                                        containers:
+                                          title: Container Resources
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              name:
+                                                title: Container name
+                                                type: string
+                                              CPU:
+                                                title: Container CPU
+                                                type: string
+                                                enum: ["100m","200m","300m","400m","500m", "1000m", "1500m", "2000m"]
+                                                default: 500m
+                                              Memory:
+                                                title: Container Memory
+                                                type: string
+                                                enum: ["256Mi", "512Mi", "1Gi", "1.5Gi", "2Gi", "4Gi", "8Gi", "16Gi"]
+                                                default: 512Mi
+                                          default: []
+                                                
+                                required:
+                                  - kubernetesConfiguration 
                 required:
-                  - kubernetesConfiguration 
+                  - infraSetup
+            - if:
+                properties:
+                  cloud:
+                    const: BareMetal
+              then:
+                properties:
+                  infraSetup:
+                    type: object
+                    properties:
+                      infrastructureType:
+                        title: Infrastructure Type
+                        type: string
+                        description: Select infrastructure type
+                        enum:
+                          - openshift
+                      dependencies:
+                        infrastructureType:
+                          allOf:
+                            - if:
+                                properties:
+                                  infrastructureType:
+                                    const: openshift
+                              then:
+                                properties:
+                                  kubernetesConfiguration:
+                                      type: object
+                                      properties:
+                                        cluster:
+                                          title: Openshift Cluster
+                                          type: string
+                                          enum:
+                                            - sesandboxkubernetes
+                                            - latamsandboxkubernetes
+                                          enumNames:
+                                            - SE Sandbox
+                                            - SE Latam GKE
+                                          default: dev
+                                        namespace:
+                                          title: Openshift Namespace
+                                          type: string
+                                        createIngress:
+                                          title: Generate Openshift Ingress
+                                          type: boolean
+                                          default: true
+                                        containerReplicas:
+                                          title: Container replicas
+                                          type: string
+                                          default: "3"
+                                        containers:
+                                          title: Container Resources
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              name:
+                                                title: Container name
+                                                type: string
+                                              CPU:
+                                                title: Container CPU
+                                                type: string
+                                                enum: ["100m","200m","300m","400m","500m", "1000m", "1500m", "2000m"]
+                                                default: 500m
+                                              Memory:
+                                                title: Container Memory
+                                                type: string
+                                                enum: ["256Mi", "512Mi", "1Gi", "1.5Gi", "2Gi", "4Gi", "8Gi", "16Gi"]
+                                                default: 512Mi
+                                          default: []
+                                required:
+                                  - kubernetesConfiguration 
+                required:
+                  - infraSetup
 
   steps:
     - id: project-provision
