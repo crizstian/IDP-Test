@@ -1,8 +1,8 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: service-deployment-template
-  title: Service Deployment Template
+  name: full-onboarding-workflow
+  title: Full Onboarding Kit - Harness-Repo-IaC
   description: Template for creating and deploying services with infrastructure provisioning
   tags:
     - harness
