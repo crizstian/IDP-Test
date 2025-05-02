@@ -452,7 +452,7 @@ spec:
                                   const: openshift
                             then:
                               properties:
-                                kubernetesConfiguration:
+                                openshiftConfiguration:
                                     type: object
                                     properties:
                                       cluster:
@@ -497,7 +497,7 @@ spec:
                                               default: 512Mi
                                         default: []
                               required:
-                                - kubernetesConfiguration 
+                                - openshiftConfiguration 
               
                 required:
                   - infraSetup
@@ -537,9 +537,7 @@ spec:
       input:
         url: "https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/module/cd/orgs/sandbox/projects/CristianRamirez/pipelines/IDP_Infrastructure_Setup/pipeline-studio?storeType=INLINE"
         inputset:
-          infrastructureType: ${{ parameters.infrastructureType }}
-          vmConfiguration: ${{ parameters.vmConfiguration }}
-          kubernetesConfiguration: ${{ parameters.kubernetesConfiguration }}
+          infrastructureType: ${{ parameters.cloud }}
           repoName: ${{ parameters.repoName }}
         apikey: ${{ parameters.token }}       
     - id: cleanup-environment
