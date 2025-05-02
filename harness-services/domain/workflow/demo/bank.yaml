@@ -292,8 +292,6 @@ spec:
                           enum:
                             - sesandboxkubernetes
                             - latamsandboxkubernetes
-                            - ne
-                            - ns
                           enumNames:
                             - SE Sandbox
                             - SE Latam GKE
