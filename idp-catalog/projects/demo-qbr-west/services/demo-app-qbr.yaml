@@ -1,0 +1,17 @@
+kind: Component
+spec:
+  type: Service
+  lifecycle: dev
+  owner: cristian.ramirez@harness.io
+  system: demo-qbr-west
+apiVersion: backstage.io/v1alpha1
+metadata:
+  name: demo-app-qbr
+  description: demo-app-qbr service
+  tags: 
+    - java
+  annotations:
+    harness.io/project-url: https://app.harness.io/ng/account/EeRjnXTnS4GrLG5VNNJZUw/home/orgs/sandbox/projects/demoqbrwest/details
+    harness.io/cd-serviceId: demoappqbr
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: crizstian/demo-app-qbr
