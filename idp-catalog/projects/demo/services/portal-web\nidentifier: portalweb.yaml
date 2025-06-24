@@ -1,0 +1,17 @@
+apiVersion: harness.io/v1
+kind: component
+name: portal-web
+identifier: portalweb
+type: service
+owner: user:account/cristian.ramirez@harness.io
+scope: PROJECT
+projectIdentifier: demo
+project_name: demo
+orgIdentifier: sandbox
+org_name: Sandbox
+spec:
+  lifecycle: dev
+metadata:
+  tags:
+    - se-demo
+  description: demo
